@@ -21,12 +21,11 @@ const render = (container, template, place) => {
 
 
 const films = new Array(FiLM_COUNT).fill().map(() => generateFilm());
-console.log(films);
 
 
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
-//const siteBodyElement = document.querySelector('body');
+const siteBodyElement = document.querySelector('body');
 const footerElement = document.querySelector('footer');
 
 render(siteHeaderElement, createProfileTemplate(), 'beforeend');
@@ -65,12 +64,12 @@ if(films.length > FILM_COUNT_PER_STEP) {
 }
 
 
-//render(siteBodyElement, createFilmDetailTemplate(), 'beforeend');
+render(siteBodyElement, createFilmDetailTemplate(), 'beforeend');
 
-//const filmDetailsElement = document.querySelector('.film-details__inner');
+const filmDetailsElement = document.querySelector('.film-details__inner');
 
-//render(filmDetailsElement, createFilmDetailsInformationTemplate(films[0]), 'beforeend');
-//render(filmDetailsElement, createCommentsTemplate(films[0]), 'beforeend');
+render(filmDetailsElement, createFilmDetailsInformationTemplate(films[0]), 'beforeend');
+render(filmDetailsElement, createCommentsTemplate(films[0]), 'beforeend');
 
 
 render(footerElement, createFooterStatisticsTemplate(films.length), 'beforeend');
