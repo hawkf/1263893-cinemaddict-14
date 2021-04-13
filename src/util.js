@@ -5,7 +5,7 @@ const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-const renderElement = (container, template, place) => {
+const render = (container, template, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(template);
@@ -14,11 +14,6 @@ const renderElement = (container, template, place) => {
       container.append(template);
       break;
   }
-  container.insertAdjacentHTML(place, template);
-};
-
-const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
 };
 
 const createElement = (template) => {
@@ -35,17 +30,11 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const getRandomFloat = (min, max) => {
-  return Math.random() * (max - min) + min;
-};
+const getRandomFloat = (min, max) =>  Math.random() * (max - min) + min;
 
-const getRandomIndex = (array) => {
-  return getRandomInteger(0, array.length - 1);
-};
+const getRandomIndex = (array) => getRandomInteger(0, array.length - 1);
 
-const getRandomArrayElement = (array) => {
-  return array[getRandomIndex(array)];
-};
+const getRandomArrayElement = (array) => array[getRandomIndex(array)];
 
 const shuffle = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -56,9 +45,7 @@ const shuffle = (array) => {
   return array;
 };
 
-const humanizeFilmRealeaseDate = (date) => {
-  return dayjs(date).format('DD MMMM YYYY');
-};
+const humanizeFilmRealeaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
 
 
-export {getRandomInteger, getRandomArrayElement, getRandomFloat, shuffle, getRandomIndex, humanizeFilmRealeaseDate, renderTemplate, createElement, renderElement, RenderPosition};
+export {getRandomInteger, getRandomArrayElement, getRandomFloat, shuffle, getRandomIndex, humanizeFilmRealeaseDate, createElement, render, RenderPosition};

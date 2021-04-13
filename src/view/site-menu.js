@@ -6,10 +6,15 @@ const createSiteMenuTemplate = (films) => {
   let favoritesCount = 0;
 
   films.forEach((film) => {
-
-    watchListCount = film.watchList ? watchListCount+1 : watchListCount;
-    historyCount = film.isWatched ? historyCount + 1 : historyCount;
-    favoritesCount = film.isFavorite ? favoritesCount + 1 : favoritesCount;
+    if(film.watchList) {
+      watchListCount++;
+    }
+    if(film.isWatched) {
+      historyCount++;
+    }
+    if(film.isFavorite) {
+      favoritesCount++;
+    }
   });
 
 

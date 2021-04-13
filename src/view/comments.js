@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
+import {createElement} from '../util';
 
-export const createCommentsTemplate = (film) => {
+const createCommentsTemplate = (film) => {
   const {commentsCount, comments} = film;
 
   const createCommentTemplate = (commetsArray) => {
@@ -21,7 +22,7 @@ export const createCommentsTemplate = (film) => {
 
   const commentElement = createCommentTemplate(comments);
 
-  return `  <div class="film-details__bottom-container">
+  return `<div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
 
@@ -59,3 +60,26 @@ export const createCommentsTemplate = (film) => {
       </section>
     </div>`;
 };
+
+export default class Comment {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createCommentsTemplate(this._film);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
