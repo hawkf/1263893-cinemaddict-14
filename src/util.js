@@ -47,5 +47,5 @@ const shuffle = (array) => {
 
 const humanizeFilmRealeaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
 
-
 export {getRandomInteger, getRandomArrayElement, getRandomFloat, shuffle, getRandomIndex, humanizeFilmRealeaseDate, createElement, render, RenderPosition};
+
