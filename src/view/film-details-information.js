@@ -1,6 +1,6 @@
-import {humanizeFilmRealeaseDate} from '../util';
+import {createElement, humanizeFilmRealeaseDate} from '../util';
 
-export const createFilmDetailsInformationTemplate = (film) => {
+const createFilmDetailsInformationTemplate = (film) => {
   const {title, rating, duration, genres, poster, description, age, director, writers, actors, releaseDate, country} = film;
 
   const date = humanizeFilmRealeaseDate(releaseDate);
@@ -81,3 +81,26 @@ export const createFilmDetailsInformationTemplate = (film) => {
       </section>
     </div>`;
 };
+
+export default class FilmDetailsInformation {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmDetailsInformationTemplate(this._film);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

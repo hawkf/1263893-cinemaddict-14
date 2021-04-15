@@ -1,5 +1,28 @@
 import dayjs from 'dayjs';
 
+const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+const render = (container, template, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(template);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(template);
+      break;
+  }
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -23,4 +46,6 @@ const shuffle = (array) => {
 };
 
 const humanizeFilmRealeaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
-export {getRandomInteger, getRandomArrayElement, getRandomFloat, shuffle, getRandomIndex, humanizeFilmRealeaseDate};
+
+export {getRandomInteger, getRandomArrayElement, getRandomFloat, shuffle, getRandomIndex, humanizeFilmRealeaseDate, createElement, render, RenderPosition};
+

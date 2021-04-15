@@ -1,13 +1,20 @@
-export const createSiteMenuTemplate = (films) => {
+import {createElement} from '../util';
+
+const createSiteMenuTemplate = (films) => {
   let watchListCount = 0;
   let historyCount = 0;
   let favoritesCount = 0;
 
   films.forEach((film) => {
-
-    watchListCount = film.watchList ? watchListCount+1 : watchListCount;
-    historyCount = film.isWatched ? historyCount + 1 : historyCount;
-    favoritesCount = film.isFavorite ? favoritesCount + 1 : favoritesCount;
+    if(film.watchList) {
+      watchListCount++;
+    }
+    if(film.isWatched) {
+      historyCount++;
+    }
+    if(film.isFavorite) {
+      favoritesCount++;
+    }
   });
 
 
@@ -21,3 +28,26 @@ export const createSiteMenuTemplate = (films) => {
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
 };
+
+export default class SiteMenu {
+  constructor(films) {
+    this._element = null;
+    this._films = films;
+  }
+
+  getTemplate() {
+    return createSiteMenuTemplate(this._films);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
