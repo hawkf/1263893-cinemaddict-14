@@ -1,6 +1,6 @@
-import {getRandomArrayElement, getRandomFloat,  getRandomInteger, shuffle} from '../util';
 import {getComment} from './comment';
 import dayjs from 'dayjs';
+import {getRandomArrayElement, getRandomFloat, getRandomInteger, shuffle} from '../utils/common';
 
 
 const TITLES = ['The man with golden arm', 'Spider man', 'Sherlock Holms', 'Mister Robinzon'];

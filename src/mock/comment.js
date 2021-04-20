@@ -1,5 +1,5 @@
-import {getRandomArrayElement, getRandomInteger} from '../util';
 import dayjs from 'dayjs';
+import {getRandomArrayElement, getRandomInteger} from '../utils/common';
 
 const AUTHORS = ['Jack', 'Mike', 'Suzan', 'Bob', 'Peter'];
 const TEXTS = ['Great movie. A rare topic.' , 'I haven\'t seen such a talented acting for a long time.', 'Thanks for the film to all its creators!'];
