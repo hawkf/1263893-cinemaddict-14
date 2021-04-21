@@ -29,6 +29,17 @@ const createElement = (template) => {
 
   return newElement.firstChild;
 };
+
+const remove = (component) => {
+  if(!(component instanceof AbstractView)) {
+    throw new Error('Can remove only components');
+  }
+
+  component.getElement().remove();
+  component.removeElement();
+};
+
 export {createElement};
 export {render};
 export {RenderPosition};
+export {remove};

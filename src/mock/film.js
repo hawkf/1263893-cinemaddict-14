@@ -4,7 +4,7 @@ import {getRandomArrayElement, getRandomFloat, getRandomInteger, shuffle} from '
 
 
 const TITLES = ['The man with golden arm', 'Spider man', 'Sherlock Holms', 'Mister Robinzon'];
-const POSTERS = ['./images/POSTERS/made-for-each-other.png', './images/POSTERS/popeye-meets-sinbad.png', './images/POSTERS/sagebrush-trail.jpg'];
+const POSTERS = ['./images/posters/made-for-each-other.png', './images/posters/popeye-meets-sinbad.png', './images/posters/sagebrush-trail.jpg'];
 const DESCRIPTIONS  = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
   'Fusce tristique felis at fermentum pharetra.',

@@ -29,6 +29,7 @@ export default class FilmCard extends AbstractView {
     super();
     this._film = film;
     this._clickHandler = this._clickHandler.bind(this);
+    this._addWatchListHandler = this._addWatchListHandler.bind(this);
   }
 
   getTemplate() {
@@ -42,10 +43,24 @@ export default class FilmCard extends AbstractView {
 
   setClickHandler(callback) {
     this._callback.click = callback;
-
+    //this.getElement().querySelectorAll().forEach((element) => {
+    //  if(element.classList.contains('film-card__poster') || element.classList.contains('film-card__title') || element.classList.contains('film-card__comments')) {
+    //   element.addEventListener('click', this._clickHandler);
+    //}
+    // });
     this.getElement().querySelector('.film-card__poster').addEventListener('click', this._clickHandler);
     this.getElement().querySelector('.film-card__title').addEventListener('click', this._clickHandler);
     this.getElement().querySelector('.film-card__comments').addEventListener('click', this._clickHandler);
-    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._clickHandler);
+
+  }
+
+  _addWatchListHandler(evt) {
+    evt.preventDefault();
+    this._callback.addWathList(this._film);
+  }
+
+  setAddWatchListHandler(callback) {
+    this._callback.addWathList = callback;
+    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist')
   }
 }
