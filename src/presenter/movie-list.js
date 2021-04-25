@@ -6,6 +6,7 @@ import ShowMoreButton from '../view/show-more-button';
 import {remove, render, RenderPosition} from '../utils/render';
 import Movie from './movie';
 import {updateItem} from '../utils/common';
+import FilmDetail from '../view/film-details';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -19,10 +20,13 @@ export default class MovieList {
     this._filmsComponent = new Films();
     this._filmsListComponent = new FilmsList();
     this._showMoreButtonComponent = new ShowMoreButton();
+    this._filmDetailsComponent = null;
     this._moviePresenter = {};
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleMovieChange = this._handleMovieChange.bind(this);
+    this._handleAddFilmPopup = this._handleAddFilmPopup.bind(this);
+    this._handleRemoveFilmPopup = this._handleRemoveFilmPopup.bind(this);
   }
 
   init(films) {
@@ -58,7 +62,7 @@ export default class MovieList {
   }
 
   _renderFilm (film) {
-    const movie = new Movie(this._filmsListContainerElement, this._popupContainer, this._handleMovieChange);
+    const movie = new Movie(this._filmsListContainerElement, this._popupContainer, this._handleMovieChange, this._handleAddFilmPopup, this._handleRemoveFilmPopup);
     movie.init(film);
     this._moviePresenter[film.id] = movie;
   }
@@ -100,9 +104,27 @@ export default class MovieList {
   }
 
   _handleMovieChange(updatedMovie) {
-    console.log('1');
     this._films = updateItem(this._films, updatedMovie);
     this._moviePresenter[updatedMovie.id].init(updatedMovie);
+  }
+
+  _handleAddFilmPopup() {
+    if(this._filmDetailsComponent ===null) {
+      this._filmDetailsComponent = new FilmDetail();
+    }
+    if(this._popupContainer.contains(this._filmDetailsComponent.getElement())) {
+      remove(this._filmDetailsComponent);
+      this._filmDetailsComponent = new FilmDetail();
+    }
+
+    this._popupContainer.classList.add('hide-overflow');
+    this._popupContainer.appendChild(this._filmDetailsComponent.getElement());
+  }
+
+  _handleRemoveFilmPopup() {
+    this._popupContainer.removeChild(this._filmDetailsComponent.getElement());
+    this._popupContainer.classList.remove('hide-overflow');
+    remove(this._filmDetailsComponent);
   }
 
 }
