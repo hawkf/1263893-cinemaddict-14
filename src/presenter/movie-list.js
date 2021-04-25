@@ -5,6 +5,7 @@ import SiteMenu from '../view/site-menu';
 import ShowMoreButton from '../view/show-more-button';
 import {remove, render, RenderPosition} from '../utils/render';
 import Movie from './movie';
+import {updateItem} from '../utils/common';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -18,8 +19,10 @@ export default class MovieList {
     this._filmsComponent = new Films();
     this._filmsListComponent = new FilmsList();
     this._showMoreButtonComponent = new ShowMoreButton();
+    this._moviePresenter = {};
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._handleMovieChange = this._handleMovieChange.bind(this);
   }
 
   init(films) {
@@ -55,8 +58,9 @@ export default class MovieList {
   }
 
   _renderFilm (film) {
-    const movie = new Movie(this._filmsListContainerElement, this._popupContainer);
+    const movie = new Movie(this._filmsListContainerElement, this._popupContainer, this._handleMovieChange);
     movie.init(film);
+    this._moviePresenter[film.id] = movie;
   }
 
   _renderFilms(from, to) {
@@ -93,6 +97,12 @@ export default class MovieList {
     if(this._renderedFilmCount >= this._films.length) {
       remove(this._showMoreButtonComponent);
     }
+  }
+
+  _handleMovieChange(updatedMovie) {
+    console.log('1');
+    this._films = updateItem(this._films, updatedMovie);
+    this._moviePresenter[updatedMovie.id].init(updatedMovie);
   }
 
 }

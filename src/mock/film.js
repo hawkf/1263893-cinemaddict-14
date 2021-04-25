@@ -1,6 +1,7 @@
 import {getComment} from './comment';
 import dayjs from 'dayjs';
 import {getRandomArrayElement, getRandomFloat, getRandomInteger, shuffle} from '../utils/common';
+import {nanoid} from 'nanoid';
 
 
 const TITLES = ['The man with golden arm', 'Spider man', 'Sherlock Holms', 'Mister Robinzon'];
@@ -64,6 +65,7 @@ const generateReleaseDate = () => {
 export const generateFilm = () => {
   const commentsCount = getRandomInteger(0, 5);
   return {
+    id: nanoid(),
     title: getRandomArrayElement(TITLES),
     poster:  getRandomArrayElement(POSTERS),
     rating: getRandomFloat(0, 10).toFixed(1),
