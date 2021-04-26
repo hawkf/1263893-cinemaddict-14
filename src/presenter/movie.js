@@ -29,6 +29,8 @@ export default class Movie {
     this._filmInformationComponent = new FilmDetailsInformation(this._film);
     this._filmInformationComponent.setClickHandler(this._removeFilmPopup);
     this._filmInformationComponent.setAddWatchListHandler(this._addWatchListHandler);
+    this._filmInformationComponent.setAddIsWatchedHandler(this._addIsWatchedHandler);
+    this._filmInformationComponent.setAddIsFavoriteHandler(this._addIsFavoriteHandler);
     this._commentComponent = new Comment(this._film);
     if(prevMovieComponent === null) {
       render(this._filmListElement, this._filmCardComponent, RenderPosition.BEFOREEND);
@@ -48,6 +50,7 @@ export default class Movie {
     remove(prevFilmInformationComponent);
 
   }
+
   _addFilmPopup() {
     this._addPopup();
     const filmDetailsElement = document.querySelector('.film-details__inner');

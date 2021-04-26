@@ -98,26 +98,37 @@ export default class FilmDetailsInformation extends AbstractView {
     return createFilmDetailsInformationTemplate(this._film);
   }
 
-
-  _clickHandler(evt) {
-    evt.preventDefault();
-    this._callback.click();
-  }
-
   setClickHandler(callback) {
     this._callback.click = callback;
 
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
   }
 
+  setAddWatchListHandler(callback) {
+    this._callback.addWathList = callback;
+    this.getElement().querySelector('#watchlist').addEventListener('click', this._addWatchListHandler);
+  }
+
+  setAddIsWatchedHandler(callback) {
+    this._callback.addIsWatched = callback;
+    this.getElement().querySelector('#watched').addEventListener('click', this._addIsWatchedHandler);
+  }
+
+  setAddIsFavoriteHandler(callback) {
+    this._callback.addIsFavorite = callback;
+    this.getElement().querySelector('#favorite').addEventListener('click', this._addIsFavoriteHandler);
+  }
+
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+
   _addWatchListHandler(evt) {
     evt.preventDefault();
     this._callback.addWathList();
-  }
-
-  setAddWatchListHandler(callback) {
-    this._callback.addWathList = callback;
-    this.getElement().querySelector('.film-details__control-input').addEventListener('click', this._addWatchListHandler);
   }
 
   _addIsWatchedHandler(evt) {
@@ -125,18 +136,9 @@ export default class FilmDetailsInformation extends AbstractView {
     this._callback.addIsWatched();
   }
 
-  setAddIsWatchedHandler(callback) {
-    this._callback.addIsWatched = callback;
-    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._addIsWatchedHandler);
-  }
 
   _addIsFavoriteHandler(evt) {
     evt.preventDefault();
     this._callback.addIsFavorite();
-  }
-
-  setAddIsFavoriteHandler(callback) {
-    this._callback.addIsFavorite = callback;
-    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._addIsFavoriteHandler);
   }
 }

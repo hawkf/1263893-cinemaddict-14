@@ -81,17 +81,6 @@ export default class MovieList {
   _renderShowMoreButton() {
     render(this._filmsListComponent, this._showMoreButtonComponent, RenderPosition.BEFOREEND);
     this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
-    /*this._showMoreButtonComponent.setClickHandler(() => {
-      films
-        .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
-        .forEach((film) => renderFilm(filmsListContainerElement, film));
-
-      renderedFilmCount += FILM_COUNT_PER_STEP;
-
-      if(renderedFilmCount >= films.length) {
-        showMoreButtonComponent.getElement().remove();
-      }
-    });*/
   }
 
   _handleShowMoreButtonClick() {
