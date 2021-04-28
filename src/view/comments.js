@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import {AbstractView} from './abstract';
 
-const createCommentsTemplate = (film) => {
-  const {commentsCount, comments} = film;
+const createCommentsTemplate = (data) => {
+  const {commentsCount, comments} = data;
 
   const createCommentTemplate = (commetsArray) => {
     return commetsArray.map((comment) => `<li class="film-details__comment">
@@ -64,10 +64,34 @@ const createCommentsTemplate = (film) => {
 export default class Comment extends AbstractView {
   constructor(film) {
     super();
-    this._film = film;
+    this._data = Comment.parseFilmToData(film);
   }
 
   getTemplate() {
-    return createCommentsTemplate(this._film);
+    return createCommentsTemplate(this._data);
+  }
+
+  static parseFilmToData(film) {
+    return Object.assign(
+      {},
+      film,
+    );
+  }
+
+  static parseDataToFilm(data) {
+    return Object.assign(
+      {},
+      data,
+    );
+  }
+
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
   }
 }
