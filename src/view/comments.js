@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
-import {AbstractView} from './abstract';
+import Smart from './smart';
+
 
 const createCommentsTemplate = (data) => {
-  const {commentsCount, comments} = data;
+  const {commentsCount, comments, newEmoji, newEmojiText} = data;
 
   const createCommentTemplate = (commetsArray) => {
     return commetsArray.map((comment) => `<li class="film-details__comment">
@@ -20,6 +21,15 @@ const createCommentsTemplate = (data) => {
           </li>`).join('');
   };
 
+  const getNewEmoji = (emoji) => {
+    if(emoji === ''){
+      return '';
+    }
+
+    return `
+            <img src=${emoji} width="55" height="55" alt="emoji">`;
+  };
+
   const commentElement = createCommentTemplate(comments);
 
   return `<div class="film-details__bottom-container">
@@ -29,15 +39,15 @@ const createCommentsTemplate = (data) => {
         <ul class="film-details__comments-list">${commentElement}</ul>
 
         <div class="film-details__new-comment">
-          <div class="film-details__add-emoji-label"></div>
+          <div class="film-details__add-emoji-label">${getNewEmoji(newEmoji)}</div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newEmojiText}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
+            <label class="film-details__emoji-label test" for="emoji-smile">
               <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
             </label>
 
@@ -61,10 +71,13 @@ const createCommentsTemplate = (data) => {
     </div>`;
 };
 
-export default class Comment extends AbstractView {
+export default class Comment extends Smart {
   constructor(film) {
     super();
     this._data = Comment.parseFilmToData(film);
+    this._addNewEmojiHandler = this._addNewEmojiHandler.bind(this);
+    this._commentInputHandler = this._commentInputHandler.bind(this);
+    this._setInnerHandlers();
   }
 
   getTemplate() {
@@ -75,6 +88,10 @@ export default class Comment extends AbstractView {
     return Object.assign(
       {},
       film,
+      {
+        newEmoji: '',
+        newEmojiText: '',
+      },
     );
   }
 
@@ -85,13 +102,33 @@ export default class Comment extends AbstractView {
     );
   }
 
-  updateElement() {
-    const prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
 
-    const newElement = this.getElement();
+  _setInnerHandlers() {
+    this.getElement().querySelectorAll('.film-details__emoji-label img')
+      .forEach((element) => {
+        element.addEventListener('click', this._addNewEmojiHandler);
+      });
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._commentInputHandler);
+  }
 
-    parent.replaceChild(newElement, prevElement);
+  _addNewEmojiHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      newEmoji: evt.target.attributes.src.nodeValue,
+    });
+
+    const inputId = evt.target.parentElement.attributes.for.nodeValue;
+
+    this.getElement().querySelector('#' + inputId).setAttribute('checked', true);
+  }
+
+  _commentInputHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      newEmojiText: evt.target.value,
+    }, true);
   }
 }

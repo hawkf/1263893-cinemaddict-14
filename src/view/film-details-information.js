@@ -122,6 +122,20 @@ export default class FilmDetailsInformation extends AbstractView {
     parent.replaceChild(newElement, prevElement);
   }
 
+  updateData(upData) {
+    if(!upData) {
+      return;
+    }
+
+    this._data = Object.assign(
+      {},
+      this._data,
+      upData,
+    );
+
+    this.updateElement();
+  }
+
   setClickHandler(callback) {
     this._callback.click = callback;
 
