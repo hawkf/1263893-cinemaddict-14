@@ -3,6 +3,20 @@ import Smart from './smart';
 
 
 const createCommentsTemplate = (data) => {
+  const EMOJIS_LIST = [
+    {id: 'emoji-smile',
+      src: './images/emoji/smile.png',
+    },
+    {id: 'emoji-smile',
+      src: './images/emoji/smile.png',
+    },
+    {id: 'emoji-smile',
+      src: './images/emoji/smile.png',
+    },
+    {id: 'emoji-smile',
+      src: './images/emoji/smile.png',
+    },
+  ];
   const {commentsCount, comments, newEmoji, newEmojiText} = data;
 
   const createCommentTemplate = (commetsArray) => {
@@ -22,12 +36,11 @@ const createCommentsTemplate = (data) => {
   };
 
   const getNewEmoji = (emoji) => {
-    if(emoji === ''){
+    if(emoji === null){
       return '';
     }
 
-    return `
-            <img src=${emoji} width="55" height="55" alt="emoji">`;
+    return `<img src=${emoji} width="55" height="55" alt="emoji">`;
   };
 
   const commentElement = createCommentTemplate(comments);
@@ -47,7 +60,7 @@ const createCommentsTemplate = (data) => {
 
           <div class="film-details__emoji-list">
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label test" for="emoji-smile">
+            <label class="film-details__emoji-label" for="emoji-smile">
               <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
             </label>
 
@@ -89,16 +102,9 @@ export default class Comment extends Smart {
       {},
       film,
       {
-        newEmoji: '',
+        newEmoji: null,
         newEmojiText: '',
       },
-    );
-  }
-
-  static parseDataToFilm(data) {
-    return Object.assign(
-      {},
-      data,
     );
   }
 
@@ -107,22 +113,27 @@ export default class Comment extends Smart {
   }
 
   _setInnerHandlers() {
-    this.getElement().querySelectorAll('.film-details__emoji-label img')
+    this.getElement().querySelectorAll('.film-details__emoji-item')
       .forEach((element) => {
-        element.addEventListener('click', this._addNewEmojiHandler);
+        element.addEventListener('change', this._addNewEmojiHandler);
       });
     this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._commentInputHandler);
   }
 
   _addNewEmojiHandler(evt) {
     evt.preventDefault();
+    const label = document.querySelector(`[for=${evt.target.id} ]`);
+
+    console.log(label.querySelector('img').attributes.src.nodeValue);
+
     this.updateData({
-      newEmoji: evt.target.attributes.src.nodeValue,
+      newEmoji: label.querySelector('img').attributes.src.nodeValue,
     });
 
     const inputId = evt.target.parentElement.attributes.for.nodeValue;
 
-    this.getElement().querySelector('#' + inputId).setAttribute('checked', true);
+    //this.getElement().querySelector('#' + inputId).setAttribute('checked', true);
+    console.log(this.getElement().querySelector('#' + inputId));
   }
 
   _commentInputHandler(evt) {
