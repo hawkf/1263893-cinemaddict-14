@@ -3,20 +3,7 @@ import Smart from './smart';
 
 
 const createCommentsTemplate = (data) => {
-  const EMOJIS_LIST = [
-    {id: 'emoji-smile',
-      src: './images/emoji/smile.png',
-    },
-    {id: 'emoji-smile',
-      src: './images/emoji/smile.png',
-    },
-    {id: 'emoji-smile',
-      src: './images/emoji/smile.png',
-    },
-    {id: 'emoji-smile',
-      src: './images/emoji/smile.png',
-    },
-  ];
+  const EMOJIS_LIST = ['smile', 'sleeping', 'puke', 'angry'];
   const {commentsCount, comments, newEmoji, newEmojiText} = data;
 
   const createCommentTemplate = (commetsArray) => {
@@ -33,6 +20,13 @@ const createCommentsTemplate = (data) => {
               </p>
             </div>
           </li>`).join('');
+  };
+
+  const creteEmojiTemplate = (emojisArray) => {
+    return emojisArray.map((emoji) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value=${emoji}>
+            <label class="film-details__emoji-label" for="emoji-smile">
+              <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">
+            </label>`).join('');
   };
 
   const getNewEmoji = (emoji) => {
@@ -58,27 +52,7 @@ const createCommentsTemplate = (data) => {
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newEmojiText}</textarea>
           </label>
 
-          <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
-          </div>
+          <div class="film-details__emoji-list">${creteEmojiTemplate(EMOJIS_LIST)}</div>
         </div>
       </section>
     </div>`;
@@ -122,18 +96,10 @@ export default class Comment extends Smart {
 
   _addNewEmojiHandler(evt) {
     evt.preventDefault();
-    const label = document.querySelector(`[for=${evt.target.id} ]`);
-
-    console.log(label.querySelector('img').attributes.src.nodeValue);
-
     this.updateData({
-      newEmoji: label.querySelector('img').attributes.src.nodeValue,
+      newEmoji: `./images/emoji/${evt.target.value}.png`,
     });
-
-    const inputId = evt.target.parentElement.attributes.for.nodeValue;
-
-    //this.getElement().querySelector('#' + inputId).setAttribute('checked', true);
-    console.log(this.getElement().querySelector('#' + inputId));
+    console.log(`./images/emoji/${evt.target.value}.png`);
   }
 
   _commentInputHandler(evt) {
