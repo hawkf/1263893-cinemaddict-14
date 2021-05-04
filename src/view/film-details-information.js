@@ -1,8 +1,8 @@
 import {AbstractView} from './abstract';
 import {humanizeFilmRealeaseDate} from '../utils/film';
 
-const createFilmDetailsInformationTemplate = (film) => {
-  const {title, rating, duration, genres, poster, description, age, director, writers, actors, releaseDate, country, watchList, isWatched, isFavorite} = film;
+const createFilmDetailsInformationTemplate = (data) => {
+  const {title, rating, duration, genres, poster, description, age, director, writers, actors, releaseDate, country, watchList, isWatched, isFavorite} = data;
 
   const date = humanizeFilmRealeaseDate(releaseDate);
   const genreName = genres.length > 1 ? 'Genres' : 'Genre';
@@ -87,7 +87,7 @@ export default class FilmDetailsInformation extends AbstractView {
   constructor(film) {
     super();
 
-    this._film = film;
+    this._data = FilmDetailsInformation.parseFilmToData(film);
     this._clickHandler = this._clickHandler.bind(this);
     this._addWatchListHandler = this._addWatchListHandler.bind(this);
     this._addIsWatchedHandler = this._addIsWatchedHandler.bind(this);
@@ -95,7 +95,45 @@ export default class FilmDetailsInformation extends AbstractView {
   }
 
   getTemplate() {
-    return createFilmDetailsInformationTemplate(this._film);
+    return createFilmDetailsInformationTemplate(this._data);
+  }
+
+  static parseFilmToData(film) {
+    return Object.assign(
+      {},
+      film,
+    );
+  }
+
+  static parseDataToFilm(data) {
+    return Object.assign(
+      {},
+      data,
+    );
+  }
+
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
+  }
+
+  updateData(upData) {
+    if(!upData) {
+      return;
+    }
+
+    this._data = Object.assign(
+      {},
+      this._data,
+      upData,
+    );
+
+    this.updateElement();
   }
 
   setClickHandler(callback) {

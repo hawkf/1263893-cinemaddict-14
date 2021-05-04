@@ -50,7 +50,6 @@ export default class FilmCard extends AbstractView {
         element.addEventListener('click', this._clickHandler);
       }
     });
-
   }
 
   setAddWatchListHandler(callback) {

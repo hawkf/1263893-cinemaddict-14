@@ -1,6 +1,7 @@
 import FilmCard from '../view/film-card';
 import FilmDetailsInformation from '../view/film-details-information';
 import {render, replace, RenderPosition, remove} from '../utils/render';
+import Comment from '../view/comments';
 
 export default class Movie {
   constructor(filmListElement, popupContainer, changeData, addPopup, removeFilmPopup) {
