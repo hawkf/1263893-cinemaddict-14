@@ -3,18 +3,18 @@ import {AbstractView} from './abstract';
 export default class Smart extends AbstractView {
   constructor() {
     super();
-    this._data = {};
+    this._dataState = {};
   }
 
-  updateData(update, justDataUpdating) {
-    if (!update) {
+  updateData(updateData, justDataUpdating) {
+    if (!updateData) {
       return;
     }
 
-    this._data = Object.assign(
+    this._dataState = Object.assign(
       {},
-      this._data,
-      update,
+      this._dataState,
+      updateData,
     );
 
     if (justDataUpdating) {

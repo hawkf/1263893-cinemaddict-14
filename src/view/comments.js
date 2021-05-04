@@ -2,9 +2,9 @@ import dayjs from 'dayjs';
 import Smart from './smart';
 
 
-const createCommentsTemplate = (data) => {
+const createCommentsTemplate = (dataState) => {
   const EMOJIS_LIST = ['smile', 'sleeping', 'puke', 'angry'];
-  const {commentsCount, comments, newEmoji, newEmojiText} = data;
+  const {commentsCount, comments, newEmoji, newEmojiText} = dataState;
 
   const createCommentTemplate = (commetsArray) => {
     return commetsArray.map((comment) => `<li class="film-details__comment">
@@ -23,8 +23,8 @@ const createCommentsTemplate = (data) => {
   };
 
   const creteEmojiTemplate = (emojisArray) => {
-    return emojisArray.map((emoji) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value=${emoji}>
-            <label class="film-details__emoji-label" for="emoji-smile">
+    return emojisArray.map((emoji) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value=${emoji}>
+            <label class="film-details__emoji-label" for="emoji-${emoji}">
               <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">
             </label>`).join('');
   };
@@ -61,14 +61,14 @@ const createCommentsTemplate = (data) => {
 export default class Comment extends Smart {
   constructor(film) {
     super();
-    this._data = Comment.parseFilmToData(film);
+    this._dataState = Comment.parseFilmToData(film);
     this._addNewEmojiHandler = this._addNewEmojiHandler.bind(this);
     this._commentInputHandler = this._commentInputHandler.bind(this);
     this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createCommentsTemplate(this._data);
+    return createCommentsTemplate(this._dataState);
   }
 
   static parseFilmToData(film) {
@@ -99,7 +99,6 @@ export default class Comment extends Smart {
     this.updateData({
       newEmoji: `./images/emoji/${evt.target.value}.png`,
     });
-    console.log(`./images/emoji/${evt.target.value}.png`);
   }
 
   _commentInputHandler(evt) {
