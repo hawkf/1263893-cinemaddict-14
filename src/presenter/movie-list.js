@@ -7,14 +7,17 @@ import {remove, render, RenderPosition} from '../utils/render';
 import Movie from './movie';
 import {updateItem} from '../utils/common';
 import FilmDetail from '../view/film-details';
+import {SortType} from '../const';
+import {sortByRating} from '../utils/film';
 
 const FILM_COUNT_PER_STEP = 5;
 
 export default class MovieList {
 
-  constructor(movieContainer, popupContainer) {
+  constructor(movieContainer, popupContainer, moviesModel) {
     this._movieContainer = movieContainer;
     this._popupContainer = popupContainer;
+    this._moviesModel = moviesModel;
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
     this._sortComponent = new Sort();
     this._filmsComponent = new Films();
@@ -22,6 +25,7 @@ export default class MovieList {
     this._showMoreButtonComponent = new ShowMoreButton();
     this._filmDetailsComponent = null;
     this._moviePresenter = {};
+    this._currentSortType = SortType.RATING;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleMovieChange = this._handleMovieChange.bind(this);
@@ -39,6 +43,14 @@ export default class MovieList {
     this._renderSort();
     this._renderFilmsContainer();
     this._renderMovieList();
+  }
+
+  _getMovies() {
+    switch (this._currentSortType) {
+      case SortType.RATING:
+        return this._moviesModel.getMovies().slice().sort(sortByRating);
+    }
+    return this._moviesModel.getMovies();
   }
 
   _renderSiteMenu() {
@@ -92,8 +104,12 @@ export default class MovieList {
     }
   }
 
+  _handleSortTypeChange(sortType) {
+    this._currentSortType = sortType;
+  }
+
   _handleMovieChange(updatedMovie) {
-    this._films = updateItem(this._films, updatedMovie);
+    //this._films = updateItem(this._films, updatedMovie);
     this._moviePresenter[updatedMovie.id].init(updatedMovie);
   }
 
