@@ -41,6 +41,15 @@ export default class MovieList {
     this._renderMovieList();
   }
 
+  _clearMovieList() {
+    Object
+      .values(this._moviePresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._moviePresenter = {};
+    this._renderedFilmCount = FILM_COUNT_PER_STEP;
+    remove(this._showMoreButtonComponent);
+  }
+
   _renderSiteMenu() {
     render(this._movieContainer, this._siteMenuComponent, RenderPosition.BEFOREEND);
   }
