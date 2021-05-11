@@ -7,6 +7,8 @@ import {remove, render, RenderPosition} from '../utils/render';
 import Movie from './movie';
 import {updateItem} from '../utils/common';
 import FilmDetail from '../view/film-details';
+import {SortType} from '../const';
+import {sortByDate, sortByRating} from '../utils/film';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -22,11 +24,13 @@ export default class MovieList {
     this._showMoreButtonComponent = new ShowMoreButton();
     this._filmDetailsComponent = null;
     this._moviePresenter = {};
+    this._currentSortType = SortType.DEFAULT;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleMovieChange = this._handleMovieChange.bind(this);
     this._handleAddFilmPopup = this._handleAddFilmPopup.bind(this);
     this._handleRemoveFilmPopup = this._handleRemoveFilmPopup.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(films) {
@@ -54,8 +58,32 @@ export default class MovieList {
     render(this._movieContainer, this._siteMenuComponent, RenderPosition.BEFOREEND);
   }
 
+  _sortFilms(sortType) {
+    switch (sortType) {
+      case SortType.DATE:
+        this._films.sort(sortByDate);
+        break;
+      case SortType.RATING:
+        this._films.sort(sortByRating);
+        break;
+      default:
+        this._films = this._sourcedFilms.slice();
+    }
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._currentSortType = sortType;
+    this._sortFilms(sortType);
+    this._clearMovieList();
+    this._renderMovieList();
+  }
+
   _renderSort() {
     render(this._movieContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderMovieList() {
