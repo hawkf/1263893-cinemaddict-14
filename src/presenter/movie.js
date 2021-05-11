@@ -52,6 +52,11 @@ export default class Movie {
 
   }
 
+  destroy() {
+    remove(this._filmCardComponent);
+    remove(this._filmInformationComponent);
+  }
+
   _addFilmPopup() {
     this._addPopup();
     const filmDetailsElement = document.querySelector('.film-details__inner');
