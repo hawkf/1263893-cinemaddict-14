@@ -1,10 +1,9 @@
-import FilterView from '../view/filter.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {filter} from '../utils/filter.js';
 import {FilterType, UpdateType} from '../const.js';
-import SiteMenu from "../view/site-menu";
+import Filter from '../view/filter';
 
-export default class Filter {
+export default class FilterPresenter {
   constructor(filterContainer, filterModel, moviesModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
@@ -23,7 +22,7 @@ export default class Filter {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new SiteMenu(filters, this._filterModel.getFilter());
+    this._filterComponent = new Filter(filters, this._filterModel.getFilter());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -53,7 +52,7 @@ export default class Filter {
     return [
       {
         type: FilterType.ALL,
-        name: 'All',
+        name: 'All movies',
         count: filter[FilterType.ALL](films).length,
       },
       {

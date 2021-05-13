@@ -2,9 +2,10 @@ import Profile from './view/profile';
 import FooterStatistics from './view/footer-statistics';
 import {generateFilm} from './mock/film';
 import {render, RenderPosition} from './utils/render';
-import MovieList from './presenter/movie-list';
+import MovieListPresenter from './presenter/movie-list-presenter';
 import Movies from './model/movies';
 import Filter from './model/filter';
+import FilterPresenter from './presenter/filter-presenter';
 
 
 const FiLM_COUNT = 20;
@@ -22,8 +23,12 @@ const siteHeaderElement = document.querySelector('.header');
 const siteBodyElement = document.querySelector('body');
 const footerElement = document.querySelector('footer');
 
-const movieList = new MovieList(siteMainElement, siteBodyElement, moviesModel);
+const movieListPresenter = new MovieListPresenter(siteMainElement, siteBodyElement, moviesModel, filterModel);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
+
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
 
-movieList.init(films);
+filterPresenter.init();
+movieListPresenter.init(films);
+
 render(footerElement, new FooterStatistics(films.length), 'beforeend');
