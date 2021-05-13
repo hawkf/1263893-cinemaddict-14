@@ -30,12 +30,25 @@ const createSiteMenuTemplate = (films) => {
 };
 
 export default class SiteMenu extends AbstractView {
-  constructor(films) {
+  constructor(filters, currentFilterType) {
     super();
-    this._films = films;
+    this._filters = filters;
+    this._currentFilter = currentFilterType;
+
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createSiteMenuTemplate(this._films);
+    return createSiteMenuTemplate(this._filters, this._currentFilter);
+  }
+
+  _filterTypeChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.value);
+  }
+
+  setFilterTypeChangeHandler(callback) {
+    this._callback.filterTypeChange = callback;
+    this.getElement().addEventListener('change', this._filterTypeChangeHandler);
   }
 }

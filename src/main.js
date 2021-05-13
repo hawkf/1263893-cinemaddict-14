@@ -4,6 +4,7 @@ import {generateFilm} from './mock/film';
 import {render, RenderPosition} from './utils/render';
 import MovieList from './presenter/movie-list';
 import Movies from './model/movies';
+import Filter from './model/filter';
 
 
 const FiLM_COUNT = 20;
@@ -12,6 +13,8 @@ const films = new Array(FiLM_COUNT).fill().map(() => generateFilm());
 
 const moviesModel = new Movies();
 moviesModel.setMovies(films);
+
+const filterModel = new Filter();
 
 
 const siteMainElement = document.querySelector('.main');
