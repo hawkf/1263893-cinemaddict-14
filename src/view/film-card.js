@@ -40,7 +40,9 @@ export default class FilmCard extends AbstractView {
 
   _clickHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+    console.log(this._film.id);
+    this._callback.click(this._film.id);
+
   }
 
   setClickHandler(callback) {

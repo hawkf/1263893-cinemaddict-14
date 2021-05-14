@@ -8,12 +8,12 @@ import Filter from './model/filter';
 import FilterPresenter from './presenter/filter-presenter';
 
 
-const FiLM_COUNT = 20;
+const FiLM_COUNT = 1;
 
 const films = new Array(FiLM_COUNT).fill().map(() => generateFilm());
 
 const moviesModel = new Movies();
-moviesModel.setMovies(films);
+moviesModel.set(films);
 
 const filterModel = new Filter();
 

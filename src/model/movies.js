@@ -6,15 +6,15 @@ export default class Movies extends Observer {
     this._movies = [];
   }
 
-  setMovies(movies) {
+  set(movies) {
     this._movies = movies.slice();
   }
 
-  getMovies() {
+  get() {
     return this._movies;
   }
 
-  updateMovie(updateType, update) {
+  update(updateType, update) {
     const index = this._movies.findIndex((movie) => movie.id === update.id);
 
     if (index === -1) {

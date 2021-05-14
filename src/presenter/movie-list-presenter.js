@@ -3,12 +3,13 @@ import Films from '../view/films';
 import FilmsList from '../view/films-list';
 import ShowMoreButton from '../view/show-more-button';
 import {remove, render, RenderPosition, replace} from '../utils/render';
-import MoviePresenter from './moviePresenter';
+import MoviePresenter from './movie-presenter';
 import FilmDetail from '../view/film-details';
 import {SortType, UpdateType} from '../const';
 import {sortByDate, sortByRating} from '../utils/film';
 import NoFilmComponent from '../view/no-film';
 import {filter} from '../utils/filter';
+import PopupPresenter from './popup';
 
 
 const FILM_COUNT_PER_STEP = 5;
@@ -29,6 +30,9 @@ export default class MovieListPresenter {
     this._noFilmsComponent = new NoFilmComponent();
     this._filmDetailsComponent = null;
     this._moviePresenter = {};
+    this._renderedMoviePresenter = null;
+
+    this._movieInformationPresenter = {};
     this._currentSortType = SortType.DEFAULT;
 
 
@@ -51,8 +55,9 @@ export default class MovieListPresenter {
 
 
   _getMovies() {
-    const filterType = this._filterModel.getFilter();
-    const movies = this._moviesModel.getMovies();
+    const filterType = this._filterModel.get();
+    const movies = this._moviesModel.get();
+    this._createMovieInformationPresenters(movies);
     const filteredMovies = filter[filterType](movies);
 
     switch (this._currentSortType) {
@@ -62,6 +67,13 @@ export default class MovieListPresenter {
         return filteredMovies.sort(sortByRating);
     }
     return filteredMovies;
+  }
+
+  _createMovieInformationPresenters (movies) {
+    movies.forEach((movie) => {
+      const movieInformation = new PopupPresenter(this._popupContainer, movie, this._handleViewAction, this._handleRemoveFilmPopup);
+      this._movieInformationPresenter[movie.id] = movieInformation;
+    });
   }
 
   _renderNoFilms() {
@@ -97,6 +109,11 @@ export default class MovieListPresenter {
     this._filmsListContainerElement = this._filmsListComponent.getElement().querySelector('.films-list__container');
     const films = this._getMovies();
 
+    if(this._renderedMoviePresenter !== null) {
+      const popupFilm = films.find((film) => film.id === this._renderedMoviePresenter.getFilmId());
+      this._renderedMoviePresenter.update(popupFilm);
+      this._renderedMoviePresenter.init();
+    }
     if (filmCount === 0) {
       this._renderNoFilms();
       return;
@@ -138,6 +155,7 @@ export default class MovieListPresenter {
     const movie = new MoviePresenter(this._filmsListContainerElement, this._popupContainer, this._handleViewAction, this._handleAddFilmPopup, this._handleRemoveFilmPopup);
     movie.init(film);
     this._moviePresenter[film.id] = movie;
+
   }
 
   _renderFilms(films) {
@@ -173,7 +191,7 @@ export default class MovieListPresenter {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    this._moviesModel.updateMovie(updateType, update);
+    this._moviesModel.update(updateType, update);
   }
 
   _handleModelEvent(updateType, data) {
@@ -192,22 +210,25 @@ export default class MovieListPresenter {
     }
   }
 
-  _handleAddFilmPopup() {
-    if(this._filmDetailsComponent ===null) {
+  _handleAddFilmPopup(filmId) {
+    if (this._filmDetailsComponent ===null) {
       this._filmDetailsComponent = new FilmDetail();
     }
-    if(this._popupContainer.contains(this._filmDetailsComponent.getElement())) {
+    if (this._popupContainer.contains(this._filmDetailsComponent.getElement())) {
       remove(this._filmDetailsComponent);
       this._filmDetailsComponent = new FilmDetail();
     }
 
     this._popupContainer.classList.add('hide-overflow');
     this._popupContainer.appendChild(this._filmDetailsComponent.getElement());
+    this._movieInformationPresenter[filmId].init();
+    this._renderedMoviePresenter = this._movieInformationPresenter[filmId];
   }
 
   _handleRemoveFilmPopup() {
     this._popupContainer.removeChild(this._filmDetailsComponent.getElement());
     this._popupContainer.classList.remove('hide-overflow');
     remove(this._filmDetailsComponent);
+    this._renderedMoviePresenter = null;
   }
 }

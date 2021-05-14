@@ -19,10 +19,10 @@ export default class FilterPresenter {
   }
 
   init() {
-    const filters = this._getFilters();
+    const filters = this._get();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new Filter(filters, this._filterModel.getFilter());
+    this._filterComponent = new Filter(filters, this._filterModel.get());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -39,15 +39,15 @@ export default class FilterPresenter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
+    if (this._filterModel.get() === filterType) {
       return;
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filterModel.set(UpdateType.MAJOR, filterType);
   }
 
-  _getFilters() {
-    const films = this._moviesModel.getMovies();
+  _get() {
+    const films = this._moviesModel.get();
 
     return [
       {
