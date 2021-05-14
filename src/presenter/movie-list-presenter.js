@@ -211,6 +211,13 @@ export default class MovieListPresenter {
   }
 
   _handleAddFilmPopup(filmId) {
+    if(this._renderedMoviePresenter !== null) {
+      this._handleRemoveFilmPopup();
+      this._renderedMoviePresenter = null;
+      /*this._movieInformationPresenter[filmId].init();
+      this._renderedMoviePresenter = this._movieInformationPresenter[filmId];
+      return ;*/
+    }
     if (this._filmDetailsComponent ===null) {
       this._filmDetailsComponent = new FilmDetail();
     }
@@ -223,6 +230,7 @@ export default class MovieListPresenter {
     this._popupContainer.appendChild(this._filmDetailsComponent.getElement());
     this._movieInformationPresenter[filmId].init();
     this._renderedMoviePresenter = this._movieInformationPresenter[filmId];
+
   }
 
   _handleRemoveFilmPopup() {

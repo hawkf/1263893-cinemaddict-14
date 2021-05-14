@@ -3,7 +3,7 @@ import FilmDetailsInformation from '../view/film-details-information';
 import {render, replace, RenderPosition, remove} from '../utils/render';
 import Comment from '../view/comments';
 import {UpdateType, UserAction} from '../const';
-import PopupPresenter from "./popup";
+import PopupPresenter from './popup';
 
 export default class MoviePresenter {
   constructor(filmListElement, popupContainer, changeData, addPopup, removeFilmPopup) {

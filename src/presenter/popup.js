@@ -25,16 +25,17 @@ export default class PopupPresenter {
     this._filmInformationComponent.setAddIsWatchedHandler(this._addIsWatchedHandler);
     this._filmInformationComponent.setAddIsFavoriteHandler(this._addIsFavoriteHandler);
     this._commentComponent = new Comment(this._film);
-
-    if (prevFilmInformationComponent === null) {
+    if(prevFilmInformationComponent === null) {
       this._renderFilmPopup();
       return;
     }
-    if(this._popupContainer.contains(prevFilmInformationComponent.getElement())) {
+
+    if(document.querySelector('.film-details__inner').contains(prevFilmInformationComponent.getElement())) {
       replace(this._filmInformationComponent, prevFilmInformationComponent);
     }
 
     remove(prevFilmInformationComponent);
+
   }
 
   update(film) {
