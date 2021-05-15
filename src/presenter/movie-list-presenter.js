@@ -62,9 +62,9 @@ export default class MovieListPresenter {
 
     switch (this._currentSortType) {
       case SortType.DATE:
-        return filteredMovies.sort(sortByDate);
+        return filteredMovies.slice().sort(sortByDate);
       case SortType.RATING:
-        return filteredMovies.sort(sortByRating);
+        return filteredMovies.slice().sort(sortByRating);
     }
     return filteredMovies;
   }
@@ -89,7 +89,6 @@ export default class MovieListPresenter {
       .forEach((presenter) => presenter.destroy());
     this._moviePresenter = {};
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
-    //remove(this._sortComponent);
     remove(this._noFilmsComponent);
     remove(this._showMoreButtonComponent);
 
