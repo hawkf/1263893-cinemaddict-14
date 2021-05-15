@@ -16,6 +16,8 @@ const shuffle = (array) => {
   return array;
 };
 
+export const isCtrlEnterKey = (evt) => evt.ctrlKey && evt.keyCode == 13;
+
 export {shuffle};
 export {getRandomArrayElement};
 export {getRandomIndex};

@@ -2,7 +2,7 @@ import Sort from '../view/sort';
 import Films from '../view/films';
 import FilmsList from '../view/films-list';
 import ShowMoreButton from '../view/show-more-button';
-import {remove, render, RenderPosition, replace} from '../utils/render';
+import {remove, render, RenderPosition} from '../utils/render';
 import MoviePresenter from './movie-presenter';
 import FilmDetail from '../view/film-details';
 import {SortType, UpdateType} from '../const';
@@ -71,7 +71,7 @@ export default class MovieListPresenter {
 
   _createMovieInformationPresenters (movies) {
     movies.forEach((movie) => {
-      const movieInformation = new PopupPresenter(this._popupContainer, movie, this._handleViewAction, this._handleRemoveFilmPopup);
+      const movieInformation = new PopupPresenter(movie, this._handleViewAction, this._handleRemoveFilmPopup);
       this._movieInformationPresenter[movie.id] = movieInformation;
     });
   }
@@ -214,9 +214,6 @@ export default class MovieListPresenter {
     if(this._renderedMoviePresenter !== null) {
       this._handleRemoveFilmPopup();
       this._renderedMoviePresenter = null;
-      /*this._movieInformationPresenter[filmId].init();
-      this._renderedMoviePresenter = this._movieInformationPresenter[filmId];
-      return ;*/
     }
     if (this._filmDetailsComponent ===null) {
       this._filmDetailsComponent = new FilmDetail();
