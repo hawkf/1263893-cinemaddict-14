@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import Smart from './smart';
 import {isCtrlEnterKey} from '../utils/common';
+import he from 'he';
 
 
 const createCommentsTemplate = (dataState) => {
@@ -50,7 +51,7 @@ const createCommentsTemplate = (dataState) => {
           <div class="film-details__add-emoji-label">${getNewEmoji(newEmoji)}</div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${newEmojiText}</textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(newEmojiText)}</textarea>
           </label>
 
           <div class="film-details__emoji-list">${creteEmojiTemplate(EMOJIS_LIST)}</div>
