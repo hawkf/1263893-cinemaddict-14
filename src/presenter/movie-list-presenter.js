@@ -2,7 +2,7 @@ import Sort from '../view/sort';
 import Films from '../view/films';
 import FilmsList from '../view/films-list';
 import ShowMoreButton from '../view/show-more-button';
-import {remove, render, RenderPosition} from '../utils/render';
+import {remove, render, RenderPosition, replace} from '../utils/render';
 import MoviePresenter from './movie-presenter';
 import FilmDetail from '../view/film-details';
 import {SortType, UpdateType} from '../const';
@@ -89,7 +89,7 @@ export default class MovieListPresenter {
       .forEach((presenter) => presenter.destroy());
     this._moviePresenter = {};
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
-    remove(this._sortComponent);
+    //remove(this._sortComponent);
     remove(this._noFilmsComponent);
     remove(this._showMoreButtonComponent);
 
@@ -114,12 +114,13 @@ export default class MovieListPresenter {
       this._renderedMoviePresenter.update(popupFilm);
       this._renderedMoviePresenter.init();
     }
+    this._renderSort();
+
     if (filmCount === 0) {
       this._renderNoFilms();
       return;
     }
 
-    this._renderSort();
 
     this._renderFilms(films.slice(0, Math.min(filmCount, this._renderedFilmCount)));
 
@@ -141,14 +142,19 @@ export default class MovieListPresenter {
   }
 
   _renderSort() {
-    if (this._sortComponent !== null) {
-      this._sortComponent = null;
-    }
-
+    const prevSortComponent = this._sortComponent;
     this._sortComponent = new Sort(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    if (prevSortComponent === null) {
+      render(this._movieContainer, this._sortComponent, RenderPosition.BEFOREEND);
+      return;
+    }
 
-    render(this._movieContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    if (this._movieContainer.contains(prevSortComponent.getElement())) {
+      replace(this._sortComponent, prevSortComponent);
+    }
+
+    remove(prevSortComponent);
   }
 
   _renderFilm (film) {
