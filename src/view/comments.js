@@ -63,7 +63,6 @@ const createCommentsTemplate = (dataState) => {
 export default class Comment extends Smart {
   constructor(film) {
     super();
-    console.log(film.comments);
     this._dataState = Comment.parseFilmToData(film);
     this._addNewEmojiHandler = this._addNewEmojiHandler.bind(this);
     this._commentInputHandler = this._commentInputHandler.bind(this);

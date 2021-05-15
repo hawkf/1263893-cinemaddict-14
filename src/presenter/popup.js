@@ -111,7 +111,6 @@ export default class PopupPresenter {
   }
 
   _addCommentHandler(updatedFilm) {
-    console.log(updatedFilm.comments);
     this._changeData(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
