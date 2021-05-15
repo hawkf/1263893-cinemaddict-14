@@ -111,6 +111,7 @@ export default class PopupPresenter {
   }
 
   _addCommentHandler(updatedFilm) {
+    console.log(updatedFilm.comments);
     this._changeData(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
@@ -124,6 +125,7 @@ export default class PopupPresenter {
   _delateCommentHandler(commentIndex) {
     // this._film.comments = [...this._film.comments.slice(0, commentIndex), ...this._film.comments.slice(commentIndex + 1, this._film.comments.length)];
     this._film.comments.splice(commentIndex, 1);
+
     this._changeData(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
