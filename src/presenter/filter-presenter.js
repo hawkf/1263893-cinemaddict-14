@@ -1,13 +1,14 @@
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import {filter} from '../utils/filter.js';
-import {FilterType, UpdateType} from '../const.js';
+import {FilterType, MenuItem, UpdateType} from '../const.js';
 import Filter from '../view/filter';
 
 export default class FilterPresenter {
-  constructor(filterContainer, filterModel, moviesModel) {
+  constructor(filterContainer, filterModel, moviesModel, menuItemClickHandler) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._moviesModel = moviesModel;
+    this._menuItemClickHandler = menuItemClickHandler;
 
     this._filterComponent = null;
 
@@ -24,6 +25,7 @@ export default class FilterPresenter {
 
     this._filterComponent = new Filter(filters, this._filterModel.get());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setMenuItemClickHandler(this._menuItemClickHandler);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
@@ -39,6 +41,7 @@ export default class FilterPresenter {
   }
 
   _handleFilterTypeChange(filterType) {
+    this._menuItemClickHandler(MenuItem.FILTER);
     if (this._filterModel.get() === filterType) {
       return;
     }

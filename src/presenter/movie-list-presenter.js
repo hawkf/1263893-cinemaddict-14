@@ -53,6 +53,17 @@ export default class MovieListPresenter {
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
+  hide() {
+    this._filmsComponent.hide();
+    this._sortComponent.hide();
+  }
+
+  show() {
+    this._sortComponent.show();
+    this._filmsComponent.show();
+    //this._handleSortTypeChange(SortType.DEFAULT);
+
+  }
 
   _getMovies() {
     const filterType = this._filterModel.get();
