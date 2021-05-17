@@ -1,4 +1,4 @@
-import {AbstractView} from './abstract';
+import Smart from './smart';
 
 const createStatsTemplate = () => {
 
@@ -51,7 +51,7 @@ const createStatsTemplate = () => {
   </section>`;
 };
 
-export default class Stats extends AbstractView {
+export default class Stats extends Smart {
   constructor() {
     super();
 

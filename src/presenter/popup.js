@@ -4,7 +4,7 @@ import Comment from '../view/comments';
 import {UpdateType, UserAction} from '../const';
 
 export default class PopupPresenter {
-  constructor(film, changeData, addPopup, removeFilmPopup) {
+  constructor(film, changeData, removeFilmPopup) {
     this._film = film;
     this._changeData = changeData;
     this._removeFilmPopup = removeFilmPopup;
@@ -15,7 +15,7 @@ export default class PopupPresenter {
     this._addIsFavoriteHandler = this._addIsFavoriteHandler.bind(this);
     this._removeFilmPopupHandler = this._removeFilmPopupHandler.bind(this);
     this._addCommentHandler = this._addCommentHandler.bind(this);
-    this._delateCommentHandler = this._delateCommentHandler.bind(this);
+    this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
   }
 
   init() {
@@ -28,8 +28,8 @@ export default class PopupPresenter {
     this._filmInformationComponent.setAddIsFavoriteHandler(this._addIsFavoriteHandler);
     this._commentComponent = new Comment(this._film);
     this._commentComponent.setFormSubmitHandler(this._addCommentHandler);
-    this._commentComponent.setCommentDelateHandler(this._delateCommentHandler);
-    if(prevFilmInformationComponent === null) {
+    this._commentComponent.setCommentDelateHandler(this._deleteCommentHandler);
+    if (prevFilmInformationComponent === null) {
       this._renderFilmPopup();
       return;
     }
@@ -40,7 +40,7 @@ export default class PopupPresenter {
     } else {
       this._renderFilmPopup();
     }
-
+    prevCommentComponent.removeFormSubmitHandler();
     remove(prevFilmInformationComponent);
     remove(prevCommentComponent);
 
@@ -121,7 +121,7 @@ export default class PopupPresenter {
     );
   }
 
-  _delateCommentHandler(commentIndex) {
+  _deleteCommentHandler(commentIndex) {
     // this._film.comments = [...this._film.comments.slice(0, commentIndex), ...this._film.comments.slice(commentIndex + 1, this._film.comments.length)];
     this._film.comments.splice(commentIndex, 1);
 

@@ -75,6 +75,11 @@ export default class Comment extends Smart {
     return createCommentsTemplate(this._dataState);
   }
 
+ /* removeElement() {
+    super.removeElement();
+    document.removeEventListener('keydown', this._formSubmitHandler);
+  }*/
+
   static parseFilmToData(film) {
     return Object.assign(
       {},
@@ -112,6 +117,10 @@ export default class Comment extends Smart {
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     document.addEventListener('keydown', this._formSubmitHandler);
+  }
+
+  removeFormSubmitHandler() {
+    document.removeEventListener('keydown', this._formSubmitHandler);
   }
 
   setCommentDelateHandler(callback) {
