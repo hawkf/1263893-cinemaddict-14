@@ -75,11 +75,6 @@ export default class Comment extends Smart {
     return createCommentsTemplate(this._dataState);
   }
 
- /* removeElement() {
-    super.removeElement();
-    document.removeEventListener('keydown', this._formSubmitHandler);
-  }*/
-
   static parseFilmToData(film) {
     return Object.assign(
       {},
