@@ -10,6 +10,7 @@ export default class PopupPresenter {
     this._removeFilmPopup = removeFilmPopup;
     this._filmInformationComponent = null;
     this._commentComponent = null;
+    this._filmDetailsComponent = null;
     this._addWatchListHandler = this._addWatchListHandler.bind(this);
     this._addIsWatchedHandler = this._addIsWatchedHandler.bind(this);
     this._addIsFavoriteHandler = this._addIsFavoriteHandler.bind(this);
@@ -18,9 +19,10 @@ export default class PopupPresenter {
     this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
   }
 
-  init() {
+  init(filmDetailsComponent) {
     const prevFilmInformationComponent = this._filmInformationComponent;
     const prevCommentComponent = this._commentComponent;
+    this._filmDetailsComponent = filmDetailsComponent;
     this._filmInformationComponent = new FilmDetailsInformation(this._film);
     this._filmInformationComponent.setClickHandler(this._removeFilmPopup);
     this._filmInformationComponent.setAddWatchListHandler(this._addWatchListHandler);
@@ -34,7 +36,7 @@ export default class PopupPresenter {
       return;
     }
 
-    if(document.querySelector('.film-details__inner').contains(prevFilmInformationComponent.getElement())) {
+    if(this._filmDetailsComponent.getElement().querySelector('.film-details__inner').contains(prevFilmInformationComponent.getElement())) {
       replace(this._filmInformationComponent, prevFilmInformationComponent);
       replace(this._commentComponent, prevCommentComponent);
     } else {

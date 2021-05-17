@@ -122,7 +122,7 @@ export default class MovieListPresenter {
     if(this._renderedMoviePresenter !== null) {
       const popupFilm = films.find((film) => film.id === this._renderedMoviePresenter.getFilmId());
       this._renderedMoviePresenter.update(popupFilm);
-      this._renderedMoviePresenter.init();
+      this._renderedMoviePresenter.init(this._filmDetailsComponent);
     }
     this._renderSort();
 
@@ -241,9 +241,8 @@ export default class MovieListPresenter {
 
     this._popupContainer.classList.add('hide-overflow');
     this._popupContainer.appendChild(this._filmDetailsComponent.getElement());
-    this._movieInformationPresenter[filmId].init();
+    this._movieInformationPresenter[filmId].init(this._filmDetailsComponent);
     this._renderedMoviePresenter = this._movieInformationPresenter[filmId];
-
   }
 
   _handleRemoveFilmPopup() {
