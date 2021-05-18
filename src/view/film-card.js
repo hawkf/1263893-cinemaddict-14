@@ -1,7 +1,7 @@
 import {AbstractView} from './abstract';
 
 const createFilmCardTemplate = (film) => {
-  const {title, rating, year, duration, genres, poster, description, commentsCount, watchList, isWatched, isFavorite} = film;
+  const {title, rating, year, duration, genres, poster, description, comments, watchList, isWatched, isFavorite} = film;
   const resultDescription = description.length > 140 ? description.substring(0, 139) + '...' : description;
 
 
@@ -15,7 +15,7 @@ const createFilmCardTemplate = (film) => {
           </p>
           <img src=${poster} alt="" class="film-card__poster">
           <p class="film-card__description">${resultDescription}</p>
-          <a class="film-card__comments">${commentsCount} comments</a>
+          <a class="film-card__comments">${comments.length} comments</a>
           <div class="film-card__controls">
             <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchList ? 'film-card__controls-item--active' : '' }" type="button">Add to watchlist</button>
             <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatched ? 'film-card__controls-item--active' : '' }" type="button">Mark as watched</button>
@@ -40,7 +40,8 @@ export default class FilmCard extends AbstractView {
 
   _clickHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.click(this._film.id);
+
   }
 
   setClickHandler(callback) {

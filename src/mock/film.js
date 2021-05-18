@@ -72,7 +72,7 @@ export const generateFilm = () => {
     year: getRandomArrayElement(YEARS),
     description: getDescription(),
     comments: new Array(commentsCount).fill().map(() => getComment()),
-    commentsCount: commentsCount,
+    //commentsCount: commentsCount,
     genres: getGenres(),
     duration: getRandomArrayElement(runtimes),
     age: getRandomArrayElement(AGES),

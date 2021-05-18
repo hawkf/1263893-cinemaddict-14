@@ -15,22 +15,11 @@ const shuffle = (array) => {
   }
   return array;
 };
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
 
-  if (index === -1) {
-    return items;
-  }
+export const isCtrlEnterKey = (evt) => evt.ctrlKey && evt.keyCode == 13;
 
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
 export {shuffle};
 export {getRandomArrayElement};
 export {getRandomIndex};
 export {getRandomFloat};
 export {getRandomInteger};
-export {updateItem};
