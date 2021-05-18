@@ -77,7 +77,7 @@ export default class MovieListPresenter {
       case SortType.RATING:
         return filteredMovies.slice().sort(sortByRating);
     }
-    return filteredMovies;
+    return filteredMovies.slice();
   }
 
   _createMovieInformationPresenters (movies) {
@@ -120,7 +120,7 @@ export default class MovieListPresenter {
     const films = this._getMovies();
 
     if(this._renderedMoviePresenter !== null) {
-      const popupFilm = films.find((film) => film.id === this._renderedMoviePresenter.getFilmId());
+      const popupFilm = this._moviesModel.get().find((film) => film.id === this._renderedMoviePresenter.getFilmId());
       this._renderedMoviePresenter.update(popupFilm);
       this._renderedMoviePresenter.init(this._filmDetailsComponent);
     }

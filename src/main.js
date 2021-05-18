@@ -9,12 +9,12 @@ import FilterPresenter from './presenter/filter-presenter';
 import Stats from './view/stats';
 import {MenuItem} from './const';
 
-
 const FiLM_COUNT = 20;
 
-const films = new Array(FiLM_COUNT).fill().map(() => generateFilm());
 
+const films = new Array(FiLM_COUNT).fill().map(() => generateFilm());
 const moviesModel = new Movies();
+
 moviesModel.set(films);
 
 const filterModel = new Filter();

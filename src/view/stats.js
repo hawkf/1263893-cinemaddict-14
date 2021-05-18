@@ -54,7 +54,6 @@ const createStatsTemplate = () => {
 export default class Stats extends Smart {
   constructor() {
     super();
-
   }
 
   getTemplate() {
