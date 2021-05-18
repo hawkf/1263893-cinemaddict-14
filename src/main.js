@@ -8,14 +8,25 @@ import Filter from './model/filter';
 import FilterPresenter from './presenter/filter-presenter';
 import Stats from './view/stats';
 import {MenuItem} from './const';
+import Api from './api';
+
 
 const FiLM_COUNT = 20;
-
+const AUTHORIZATION = 'Basic Agromat20.';
+const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict';
 
 const films = new Array(FiLM_COUNT).fill().map(() => generateFilm());
-const moviesModel = new Movies();
+//console.log(films);
+const api = new Api(END_POINT, AUTHORIZATION);
 
-moviesModel.set(films);
+api.getMovies().then((movies) => {
+  console.log(movies);
+});
+
+const moviesModel = new Movies();
+api.getMovies().then((movies) => moviesModel.set(movies));
+console.log(moviesModel.get());
+//moviesModel.set(films);
 
 const filterModel = new Filter();
 
@@ -50,4 +61,4 @@ movieListPresenter.init();
 
 render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
 
-render(footerElement, new FooterStatistics(films.length), 'beforeend');
+//render(footerElement, new FooterStatistics(films.length), 'beforeend');
