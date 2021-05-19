@@ -36,7 +36,7 @@ const createCommentsTemplate = (dataState) => {
       return '';
     }
 
-    return `<img src=${emoji} width="55" height="55" alt="emoji">`;
+    return `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">`;
   };
 
   const commentElement = createCommentTemplate(comments);
@@ -88,23 +88,16 @@ export default class Comment extends Smart {
     );
   }
 
-  static parseDataToFilm(data) {
-    const film = Object.assign(
+  static parseDataToNewComment(data) {
+    const newComment = Object.assign(
       {},
-      data,
+      {
+        comment: data.newEmojiText,
+        emotion: data.newEmoji,
+      },
     );
-    if(data.newEmoji !== null && data.newEmojiText !== '') {
-      film.comments.push({
-        autor: null,
-        text: data.newEmojiText,
-        emoji: data.newEmoji,
-        date: null,
-      });
-    }
 
-    delete film.newEmoji;
-    delete film.newEmojiText;
-    return film;
+    return newComment;
   }
 
   restoreHandlers() {
@@ -140,7 +133,7 @@ export default class Comment extends Smart {
   _addNewEmojiHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      newEmoji: `./images/emoji/${evt.target.value}.png`,
+      newEmoji: `${evt.target.value}`,
     });
   }
 
@@ -154,7 +147,7 @@ export default class Comment extends Smart {
   _formSubmitHandler(evt) {
     if(isCtrlEnterKey(evt)) {
       evt.preventDefault();
-      this._callback.formSubmit(Comment.parseDataToFilm(this._dataState));
+      this._callback.formSubmit(Comment.parseDataToNewComment(this._dataState));
     }
   }
 

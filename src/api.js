@@ -3,6 +3,7 @@ import Movies from './model/movies';
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
 };
 
 const SuccessHTTPStatusRange = {
@@ -32,6 +33,16 @@ export default class Api {
       url: `movies/${movie.id}`,
       method: Method.PUT,
       body: JSON.stringify(Movies.adaptToServer(movie)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    })
+      .then(Api.toJSON);
+  }
+
+  addComment(newComment, movieId) {
+    return this._load({
+      url: `/comments/${movieId}`,
+      method: Method.POST,
+      body: JSON.stringify(newComment),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.toJSON);

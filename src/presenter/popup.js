@@ -70,7 +70,7 @@ export default class PopupPresenter {
 
   _addWatchListHandler() {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},
@@ -84,7 +84,7 @@ export default class PopupPresenter {
 
   _addIsWatchedHandler() {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},
@@ -98,7 +98,7 @@ export default class PopupPresenter {
 
   _addIsFavoriteHandler(){
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},
@@ -114,13 +114,18 @@ export default class PopupPresenter {
     this._removeFilmPopup();
   }
 
-  _addCommentHandler(updatedFilm) {
+  _addCommentHandler(newComment) {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.ADD_COMMENT,
       UpdateType.MINOR,
       Object.assign(
         {},
-        updatedFilm,
+        {
+          comment: newComment,
+        },
+        {
+          filmId: this._film.id,
+        },
       ),
     );
   }
@@ -130,7 +135,7 @@ export default class PopupPresenter {
     this._film.comments.splice(commentIndex, 1);
 
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},

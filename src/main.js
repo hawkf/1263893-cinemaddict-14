@@ -8,6 +8,7 @@ import Stats from './view/stats';
 import FooterStatistics from './view/footer-statistics';
 import {MenuItem, UpdateType} from './const';
 import Api from './api';
+import Comments from './model/comments';
 
 const AUTHORIZATION = 'Basic Agromat20.';
 const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict';
@@ -23,7 +24,8 @@ const footerElement = document.querySelector('footer');
 const statisticsElement = new Stats();
 
 const moviesModel = new Movies();
-const movieListPresenter = new MovieListPresenter(siteMainElement, siteBodyElement, moviesModel, filterModel, api);
+const commentsModel = new Comments();
+const movieListPresenter = new MovieListPresenter(siteMainElement, siteBodyElement, moviesModel, commentsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 const handleSiteMenuClick = (menuItem) => {

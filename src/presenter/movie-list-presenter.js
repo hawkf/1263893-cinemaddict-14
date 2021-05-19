@@ -5,7 +5,7 @@ import ShowMoreButton from '../view/show-more-button';
 import {remove, render, RenderPosition, replace} from '../utils/render';
 import MoviePresenter from './movie-presenter';
 import FilmDetail from '../view/film-details';
-import {SortType, UpdateType} from '../const';
+import {SortType, UpdateType, UserAction} from '../const';
 import {sortByDate, sortByRating} from '../utils/film';
 import NoFilmComponent from '../view/no-film';
 import {filter} from '../utils/filter';
@@ -17,10 +17,11 @@ const FILM_COUNT_PER_STEP = 5;
 
 export default class MovieListPresenter {
 
-  constructor(movieContainer, popupContainer, moviesModel, filterModel, api) {
+  constructor(movieContainer, popupContainer, moviesModel, commentsModel, filterModel, api) {
     this._movieContainer = movieContainer;
     this._popupContainer = popupContainer;
     this._moviesModel = moviesModel;
+    this._commentsModel = commentsModel;
     this._filterModel = filterModel;
     this._api = api;
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
@@ -69,8 +70,6 @@ export default class MovieListPresenter {
   show() {
     this._sortComponent.show();
     this._filmsComponent.show();
-    //this._handleSortTypeChange(SortType.DEFAULT);
-
   }
 
   _getMovies() {
@@ -149,9 +148,10 @@ export default class MovieListPresenter {
     if(this._renderedMoviePresenter !== null) {
       const popupFilm = this._moviesModel.get().find((film) => film.id === this._renderedMoviePresenter.getFilmId());
       this._renderedMoviePresenter.update(popupFilm);
-      this._api.getComments(popupFilm.id).then((response) => {
+      this._renderedMoviePresenter.init(this._filmDetailsComponent, this._commentsModel.get());
+      /*this._api.getComments(popupFilm.id).then((response) => {
         this._renderedMoviePresenter.init(this._filmDetailsComponent, response);
-      });
+      });*/
     }
     if (filmCount === 0) {
       this._renderNoFilms();
@@ -234,9 +234,19 @@ export default class MovieListPresenter {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    this._api.updateMovie(update).then((response) => {
-      this._moviesModel.update(updateType, response);
-    });
+    switch (actionType) {
+      case UserAction.UPDATE_MOVIE:
+        this._api.updateMovie(update).then((response) => {
+          this._moviesModel.update(updateType, response);
+        });
+        break;
+      case  UserAction.ADD_COMMENT:
+        this._api.addComment(update.comment, update.filmId).then((response) => {
+          this._commentsModel.set(response.comments);
+          this._moviesModel.update(updateType, response.movie);
+        });
+        break;
+    }
 
   }
 
@@ -278,6 +288,7 @@ export default class MovieListPresenter {
     this._popupContainer.appendChild(this._filmDetailsComponent.getElement());
     this._api.getComments(filmId).then((response) => {
       this._movieInformationPresenter[filmId].init(this._filmDetailsComponent, response);
+      this._commentsModel.set(response);
     });
 
     this._renderedMoviePresenter = this._movieInformationPresenter[filmId];
