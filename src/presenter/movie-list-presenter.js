@@ -10,19 +10,23 @@ import {sortByDate, sortByRating} from '../utils/film';
 import NoFilmComponent from '../view/no-film';
 import {filter} from '../utils/filter';
 import PopupPresenter from './popup';
+import Loading from '../view/loading';
 
 
 const FILM_COUNT_PER_STEP = 5;
 
 export default class MovieListPresenter {
 
-  constructor(movieContainer, popupContainer, moviesModel, filterModel) {
+  constructor(movieContainer, popupContainer, moviesModel, filterModel, api) {
     this._movieContainer = movieContainer;
     this._popupContainer = popupContainer;
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
+    this._api = api;
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
+    this._isLoading = true;
 
+    this._loadingComponent = new Loading();
     this._sortComponent = null;
     this._showMoreButtonComponent = null;
     this._filmsComponent = new Films();
@@ -45,9 +49,13 @@ export default class MovieListPresenter {
   }
 
   init() {
-    this._renderSort();
+    if(!this._isLoading) {
+      this._renderSort();
+    }
+
     this._renderFilmsContainer();
     this._renderMovieList();
+
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -87,6 +95,11 @@ export default class MovieListPresenter {
     });
   }
 
+  _renderLoading() {
+    this._filmsListContainerElement = this._filmsListComponent.getElement().querySelector('.films-list__container');
+    render(this._filmsListContainerElement, this._loadingComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderNoFilms() {
     this._filmsListContainerElement = this._filmsListComponent.getElement().querySelector('.films-list__container');
     render(this._filmsListContainerElement, this._noFilmsComponent, RenderPosition.BEFOREEND);
@@ -101,6 +114,7 @@ export default class MovieListPresenter {
     this._moviePresenter = {};
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
     remove(this._noFilmsComponent);
+    remove(this._loadingComponent);
     remove(this._showMoreButtonComponent);
 
     if (resetRenderedFilmCount) {
@@ -115,6 +129,11 @@ export default class MovieListPresenter {
   }
 
   _renderMovieList() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     const filmCount = this._getMovies().length;
     this._filmsListContainerElement = this._filmsListComponent.getElement().querySelector('.films-list__container');
     const films = this._getMovies();
@@ -122,13 +141,17 @@ export default class MovieListPresenter {
     if(this._renderedMoviePresenter !== null) {
       const popupFilm = this._moviesModel.get().find((film) => film.id === this._renderedMoviePresenter.getFilmId());
       this._renderedMoviePresenter.update(popupFilm);
-      this._renderedMoviePresenter.init(this._filmDetailsComponent);
+      this._api.getComments(popupFilm.id).then((response) => {
+        this._renderedMoviePresenter.init(this._filmDetailsComponent, response);
+      });
     }
-    this._renderSort();
-
     if (filmCount === 0) {
       this._renderNoFilms();
       return;
+    }
+
+    if(!this._isLoading) {
+      this._renderSort();
     }
 
 
@@ -207,7 +230,10 @@ export default class MovieListPresenter {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    this._moviesModel.update(updateType, update);
+    this._api.updateMovie(update).then((response) => {
+      this._moviesModel.update(updateType, response);
+    });
+
   }
 
   _handleModelEvent(updateType, data) {
@@ -221,6 +247,11 @@ export default class MovieListPresenter {
         break;
       case UpdateType.MAJOR:
         this._clearMovieList({resetRenderedFilmCount: true, resetSortType: true});
+        this._renderMovieList();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderMovieList();
         break;
     }
@@ -241,7 +272,10 @@ export default class MovieListPresenter {
 
     this._popupContainer.classList.add('hide-overflow');
     this._popupContainer.appendChild(this._filmDetailsComponent.getElement());
-    this._movieInformationPresenter[filmId].init(this._filmDetailsComponent);
+    this._api.getComments(filmId).then((response) => {
+      this._movieInformationPresenter[filmId].init(this._filmDetailsComponent, response);
+    });
+
     this._renderedMoviePresenter = this._movieInformationPresenter[filmId];
   }
 

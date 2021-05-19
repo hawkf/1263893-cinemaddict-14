@@ -1,33 +1,18 @@
 import Profile from './view/profile';
-import FooterStatistics from './view/footer-statistics';
-import {generateFilm} from './mock/film';
 import {render, RenderPosition} from './utils/render';
 import MovieListPresenter from './presenter/movie-list-presenter';
 import Movies from './model/movies';
 import Filter from './model/filter';
 import FilterPresenter from './presenter/filter-presenter';
 import Stats from './view/stats';
-import {MenuItem} from './const';
+import FooterStatistics from './view/footer-statistics';
+import {MenuItem, UpdateType} from './const';
 import Api from './api';
 
-
-const FiLM_COUNT = 20;
 const AUTHORIZATION = 'Basic Agromat20.';
 const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict';
 
-const films = new Array(FiLM_COUNT).fill().map(() => generateFilm());
-//console.log(films);
 const api = new Api(END_POINT, AUTHORIZATION);
-
-api.getMovies().then((movies) => {
-  console.log(movies);
-});
-
-const moviesModel = new Movies();
-api.getMovies().then((movies) => moviesModel.set(movies));
-console.log(moviesModel.get());
-//moviesModel.set(films);
-
 const filterModel = new Filter();
 
 
@@ -37,8 +22,9 @@ const siteBodyElement = document.querySelector('body');
 const footerElement = document.querySelector('footer');
 const statisticsElement = new Stats();
 
-
-const movieListPresenter = new MovieListPresenter(siteMainElement, siteBodyElement, moviesModel, filterModel);
+const moviesModel = new Movies();
+const movieListPresenter = new MovieListPresenter(siteMainElement, siteBodyElement, moviesModel, filterModel, api);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -52,13 +38,21 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel, handleSiteMenuClick);
 
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
+render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
 
+
+api.getMovies()
+  .then((movies) => {
+    moviesModel.set(UpdateType.INIT, movies);
+    filterPresenter.setMainMenuClickHandler(handleSiteMenuClick);
+  })
+  .catch(() => {
+    moviesModel.set(UpdateType.INIT, []);
+    filterPresenter.setMainMenuClickHandler(handleSiteMenuClick);
+  });
 filterPresenter.init();
 movieListPresenter.init();
 
-render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
-
-//render(footerElement, new FooterStatistics(films.length), 'beforeend');
+render(footerElement, new FooterStatistics(20), 'beforeend');

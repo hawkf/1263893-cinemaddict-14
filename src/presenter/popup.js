@@ -6,6 +6,7 @@ import {UpdateType, UserAction} from '../const';
 export default class PopupPresenter {
   constructor(film, changeData, removeFilmPopup) {
     this._film = film;
+    this._comments = null;
     this._changeData = changeData;
     this._removeFilmPopup = removeFilmPopup;
     this._filmInformationComponent = null;
@@ -19,7 +20,8 @@ export default class PopupPresenter {
     this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
   }
 
-  init(filmDetailsComponent) {
+  init(filmDetailsComponent, comments) {
+    this._comments = comments;
     const prevFilmInformationComponent = this._filmInformationComponent;
     const prevCommentComponent = this._commentComponent;
     this._filmDetailsComponent = filmDetailsComponent;
@@ -28,7 +30,7 @@ export default class PopupPresenter {
     this._filmInformationComponent.setAddWatchListHandler(this._addWatchListHandler);
     this._filmInformationComponent.setAddIsWatchedHandler(this._addIsWatchedHandler);
     this._filmInformationComponent.setAddIsFavoriteHandler(this._addIsFavoriteHandler);
-    this._commentComponent = new Comment(this._film);
+    this._commentComponent = new Comment(this._comments);
     this._commentComponent.setFormSubmitHandler(this._addCommentHandler);
     this._commentComponent.setCommentDelateHandler(this._deleteCommentHandler);
     if (prevFilmInformationComponent === null) {

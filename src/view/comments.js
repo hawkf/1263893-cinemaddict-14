@@ -6,17 +6,17 @@ import he from 'he';
 
 const createCommentsTemplate = (dataState) => {
   const EMOJIS_LIST = ['smile', 'sleeping', 'puke', 'angry'];
-  const {commentsCount, comments, newEmoji, newEmojiText} = dataState;
+  const {comments, newEmoji, newEmojiText} = dataState;
 
   const createCommentTemplate = (commetsArray) => {
     return commetsArray.map((comment, index) => `<li class="film-details__comment">
             <span class="film-details__comment-emoji">
-              <img src=${comment.emoji} width="55" height="55" alt="emoji-smile">
+              <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
             </span>
             <div>
-              <p class="film-details__comment-text">${comment.text}</p>
+              <p class="film-details__comment-text">${comment.comment}</p>
               <p class="film-details__comment-info">
-                <span class="film-details__comment-author">${comment.autor}</span>
+                <span class="film-details__comment-author">${comment.author}</span>
                 <span class="film-details__comment-day">${dayjs(comment.date).format('YYYY/MM/DD hh:mm')}</span>
                 <button class="film-details__comment-delete" data-comment-index=${index}>Delete</button>
               </p>
@@ -43,7 +43,7 @@ const createCommentsTemplate = (dataState) => {
 
   return `<div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${dataState.comments.length}</span></h3>
 
         <ul class="film-details__comments-list">${commentElement}</ul>
 
@@ -61,9 +61,9 @@ const createCommentsTemplate = (dataState) => {
 };
 
 export default class Comment extends Smart {
-  constructor(film) {
+  constructor(comments) {
     super();
-    this._dataState = Comment.parseFilmToData(film);
+    this._dataState = Comment.parseCommentToData(comments);
     this._addNewEmojiHandler = this._addNewEmojiHandler.bind(this);
     this._commentInputHandler = this._commentInputHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -75,10 +75,12 @@ export default class Comment extends Smart {
     return createCommentsTemplate(this._dataState);
   }
 
-  static parseFilmToData(film) {
+  static parseCommentToData(comments) {
     return Object.assign(
       {},
-      film,
+      {
+        comments: comments,
+      },
       {
         newEmoji: null,
         newEmojiText: '',

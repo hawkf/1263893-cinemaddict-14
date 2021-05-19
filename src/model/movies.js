@@ -7,8 +7,9 @@ export default class Movies extends Observer {
     this._movies = [];
   }
 
-  set(movies) {
+  set(updateType, movies) {
     this._movies = movies.slice();
+    this._notify(updateType);
   }
 
   get() {
@@ -16,6 +17,7 @@ export default class Movies extends Observer {
   }
 
   update(updateType, update) {
+    const updateClient = Movies.adaptToClient(update);
     const index = this._movies.findIndex((movie) => movie.id === update.id);
 
     if (index === -1) {
@@ -24,11 +26,11 @@ export default class Movies extends Observer {
 
     this._movies = [
       ...this._movies.slice(0, index),
-      update,
+      updateClient,
       ...this._movies.slice(index + 1),
     ];
 
-    this._notify(updateType, update);
+    this._notify(updateType, updateClient);
   }
 
   static adaptToClient(movie) {
@@ -37,6 +39,7 @@ export default class Movies extends Observer {
       movie,
       {
         title: movie['film_info'].title,
+        alternativeTitle: movie['film_info'].alternative_title,
         poster:  movie['film_info'].poster,
         rating: movie['film_info'].total_rating,
         year: dayjs(movie['film_info'].release.date).format('YYYY'),
@@ -46,7 +49,7 @@ export default class Movies extends Observer {
         age: movie['film_info'].age_rating,
         director: movie['film_info'].director,
         writers: movie['film_info'].writers,
-        actors: movie['film_info'].actors.join(' '),
+        actors: movie['film_info'].actors,
         releaseDate: movie['film_info'].release.date,
         country: movie['film_info'].release.release_country,
         watchList: movie['user_details'].watchlist,
@@ -63,24 +66,38 @@ export default class Movies extends Observer {
     return adaptedMovie;
   }
 
-  /*static adaptToServer(task) {
-    const adaptedTask = Object.assign(
+  static adaptToServer(movie) {
+    const adaptedMovie = Object.assign(
       {},
-      task,
       {
-        'due_date': task.dueDate instanceof Date ? task.dueDate.toISOString() : null, // На сервере дата хранится в ISO формате
-        'is_archived': task.isArchive,
-        'is_favorite': task.isFavorite,
-        'repeating_days': task.repeating,
+        id: movie.id,
+        comments: movie.comments,
+        'film_info': {
+          'title': movie.title,
+          'alternative_title': movie.alternativeTitle,
+          'total_rating': movie.rating,
+          'poster': movie.poster,
+          'age_rating': movie.rating,
+          'director': movie.director,
+          'writers': movie.writers,
+          'actors': movie.actors,
+          'release': {
+            'date': movie.releaseDate,
+            'release_country': movie.country,
+          },
+          'runtime': movie.duration,
+          'genre': movie.genres,
+          'description': movie.description,
+        },
+        'user_details': {
+          'watchlist': movie.watchList,
+          'already_watched': movie.isWatched,
+          'watching_date': movie.watchingDate,
+          'favorite': movie.isFavorite,
+        },
       },
     );
 
-    // Ненужные ключи мы удаляем
-    delete adaptedTask.dueDate;
-    delete adaptedTask.isArchive;
-    delete adaptedTask.isFavorite;
-    delete adaptedTask.repeating;
-
-    return adaptedTask;
-  }*/
+    return adaptedMovie;
+  }
 }

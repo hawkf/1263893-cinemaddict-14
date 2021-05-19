@@ -2,7 +2,7 @@ import {AbstractView} from './abstract';
 import {humanizeFilmRealeaseDate} from '../utils/film';
 
 const createFilmDetailsInformationTemplate = (data) => {
-  const {title, rating, duration, genres, poster, description, age, director, writers, actors, releaseDate, country, watchList, isWatched, isFavorite} = data;
+  const {title, alternativeTitle, rating, duration, genres, poster, description, age, director, writers, actors, releaseDate, country, watchList, isWatched, isFavorite} = data;
 
   const date = humanizeFilmRealeaseDate(releaseDate);
   const genreName = genres.length > 1 ? 'Genres' : 'Genre';
@@ -26,7 +26,7 @@ const createFilmDetailsInformationTemplate = (data) => {
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
-              <h3 class="film-details__title">${title}</h3>
+              <h3 class="film-details__title">${alternativeTitle}</h3>
               <p class="film-details__title-original">Original: ${title}</p>
             </div>
 
@@ -42,11 +42,11 @@ const createFilmDetailsInformationTemplate = (data) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${writers.join(', ')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${actors.join(', ')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
