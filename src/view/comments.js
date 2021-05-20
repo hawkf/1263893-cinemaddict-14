@@ -89,15 +89,10 @@ export default class Comment extends Smart {
   }
 
   static parseDataToNewComment(data) {
-    const newComment = Object.assign(
-      {},
-      {
-        comment: data.newEmojiText,
-        emotion: data.newEmoji,
-      },
-    );
-
-    return newComment;
+    return {
+      comment: data.newEmojiText,
+      emotion: data.newEmoji,
+    };
   }
 
   restoreHandlers() {
@@ -144,8 +139,11 @@ export default class Comment extends Smart {
   }
 
   _formSubmitHandler(evt) {
-    if(isCtrlEnterKey(evt)) {
+    if (isCtrlEnterKey(evt)) {
       evt.preventDefault();
+      if (this._dataState.newEmoji === null || this._dataState.newEmojiText === '') {
+        return;
+      }
       this._callback.formSubmit(Comment.parseDataToNewComment(this._dataState));
     }
   }
