@@ -33,6 +33,13 @@ export default class Movies extends Observer {
     this._notify(updateType, updateClient);
   }
 
+  deleteComment(updateType, movieId, commentId) {
+    let movieComments = this._movies[movieId].comments;
+    movieComments = movieComments.filter((comment) => comment !== commentId);
+    this._movies[movieId].comments = movieComments;
+    this._notify(updateType);
+  }
+
   static adaptToClient(movie) {
     const adaptedMovie = Object.assign(
       {},

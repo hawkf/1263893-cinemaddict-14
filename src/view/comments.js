@@ -9,7 +9,7 @@ const createCommentsTemplate = (dataState) => {
   const {comments, newEmoji, newEmojiText} = dataState;
 
   const createCommentTemplate = (commetsArray) => {
-    return commetsArray.map((comment, index) => `<li class="film-details__comment">
+    return commetsArray.map((comment) => `<li class="film-details__comment">
             <span class="film-details__comment-emoji">
               <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
             </span>
@@ -18,7 +18,7 @@ const createCommentsTemplate = (dataState) => {
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${comment.author}</span>
                 <span class="film-details__comment-day">${dayjs(comment.date).format('YYYY/MM/DD hh:mm')}</span>
-                <button class="film-details__comment-delete" data-comment-index=${index}>Delete</button>
+                <button class="film-details__comment-delete" data-comment-id=${comment.id}>Delete</button>
               </p>
             </div>
           </li>`).join('');
@@ -127,7 +127,6 @@ export default class Comment extends Smart {
         element.addEventListener('change', this._addNewEmojiHandler);
       });
     this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._commentInputHandler);
-
   }
 
   _addNewEmojiHandler(evt) {
@@ -153,6 +152,6 @@ export default class Comment extends Smart {
 
   _commentDelateHandler(evt) {
     evt.preventDefault();
-    this._callback.commentDelate(evt.target.dataset.commentIndex);
+    this._callback.commentDelate(evt.target.dataset.commentId);
   }
 }

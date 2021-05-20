@@ -130,16 +130,18 @@ export default class PopupPresenter {
     );
   }
 
-  _deleteCommentHandler(commentIndex) {
-    // this._film.comments = [...this._film.comments.slice(0, commentIndex), ...this._film.comments.slice(commentIndex + 1, this._film.comments.length)];
-    this._film.comments.splice(commentIndex, 1);
-
+  _deleteCommentHandler(commentId) {
     this._changeData(
-      UserAction.UPDATE_MOVIE,
+      UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
       Object.assign(
         {},
-        this._film,
+        {
+          commentId: commentId,
+        },
+        {
+          filmId: this._film.id,
+        },
       ),
     );
   }

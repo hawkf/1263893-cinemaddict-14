@@ -246,6 +246,11 @@ export default class MovieListPresenter {
           this._moviesModel.update(updateType, response.movie);
         });
         break;
+      case UserAction.DELETE_COMMENT:
+        this._api.deleteComment(update.commentId).then((response) => {
+          this._commentsModel.deleteComment(update.commentId);
+          this._moviesModel.deleteComment(updateType, update.filmId, update.commentId);
+        });
     }
 
   }
