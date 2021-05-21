@@ -50,7 +50,7 @@ export default class MoviePresenter {
 
   _addWatchListHandler() {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},
@@ -64,7 +64,7 @@ export default class MoviePresenter {
 
   _addIsWatchedHandler() {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},
@@ -78,7 +78,7 @@ export default class MoviePresenter {
 
   _addIsFavoriteHandler(){
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},

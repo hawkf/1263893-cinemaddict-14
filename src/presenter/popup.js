@@ -6,6 +6,7 @@ import {UpdateType, UserAction} from '../const';
 export default class PopupPresenter {
   constructor(film, changeData, removeFilmPopup) {
     this._film = film;
+    this._comments = null;
     this._changeData = changeData;
     this._removeFilmPopup = removeFilmPopup;
     this._filmInformationComponent = null;
@@ -19,7 +20,8 @@ export default class PopupPresenter {
     this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
   }
 
-  init(filmDetailsComponent) {
+  init(filmDetailsComponent, comments) {
+    this._comments = comments;
     const prevFilmInformationComponent = this._filmInformationComponent;
     const prevCommentComponent = this._commentComponent;
     this._filmDetailsComponent = filmDetailsComponent;
@@ -28,7 +30,7 @@ export default class PopupPresenter {
     this._filmInformationComponent.setAddWatchListHandler(this._addWatchListHandler);
     this._filmInformationComponent.setAddIsWatchedHandler(this._addIsWatchedHandler);
     this._filmInformationComponent.setAddIsFavoriteHandler(this._addIsFavoriteHandler);
-    this._commentComponent = new Comment(this._film);
+    this._commentComponent = new Comment(this._comments);
     this._commentComponent.setFormSubmitHandler(this._addCommentHandler);
     this._commentComponent.setCommentDelateHandler(this._deleteCommentHandler);
     if (prevFilmInformationComponent === null) {
@@ -56,8 +58,35 @@ export default class PopupPresenter {
     return this._film.id;
   }
 
-  destroy() {
-    remove(this._filmInformationComponent);
+  setSaving() {
+    this._commentComponent.updateData({
+      isSaving: true,
+    });
+  }
+
+  setDeleting(commentId) {
+    this._commentComponent.updateData({
+      isDeleting: true,
+      deletingCommentId: commentId,
+    });
+  }
+
+  resetFormState() {
+    this._commentComponent.shakeForm(() => {
+      this._commentComponent.updateData({
+        isSaving: false,
+        newEmoji: null,
+        newEmojiText: '',
+      });
+    });
+  }
+
+  resetDeleteState(commentId) {
+    this._commentComponent.shakeComment(() => {
+      this._commentComponent.updateData({
+        isDeleting: false,
+      });
+    }, commentId);
   }
 
   _renderFilmPopup() {
@@ -68,7 +97,7 @@ export default class PopupPresenter {
 
   _addWatchListHandler() {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},
@@ -82,7 +111,7 @@ export default class PopupPresenter {
 
   _addIsWatchedHandler() {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},
@@ -96,7 +125,7 @@ export default class PopupPresenter {
 
   _addIsFavoriteHandler(){
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_MOVIE,
       UpdateType.MINOR,
       Object.assign(
         {},
@@ -112,27 +141,34 @@ export default class PopupPresenter {
     this._removeFilmPopup();
   }
 
-  _addCommentHandler(updatedFilm) {
+  _addCommentHandler(newComment) {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.ADD_COMMENT,
       UpdateType.MINOR,
       Object.assign(
         {},
-        updatedFilm,
+        {
+          comment: newComment,
+        },
+        {
+          filmId: this._film.id,
+        },
       ),
     );
   }
 
-  _deleteCommentHandler(commentIndex) {
-    // this._film.comments = [...this._film.comments.slice(0, commentIndex), ...this._film.comments.slice(commentIndex + 1, this._film.comments.length)];
-    this._film.comments.splice(commentIndex, 1);
-
+  _deleteCommentHandler(commentId) {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
       Object.assign(
         {},
-        this._film,
+        {
+          commentId: commentId,
+        },
+        {
+          filmId: this._film.id,
+        },
       ),
     );
   }

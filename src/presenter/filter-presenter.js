@@ -4,17 +4,15 @@ import {FilterType, MenuItem, UpdateType} from '../const.js';
 import Filter from '../view/filter';
 
 export default class FilterPresenter {
-  constructor(filterContainer, filterModel, moviesModel, menuItemClickHandler) {
+  constructor(filterContainer, filterModel, moviesModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._moviesModel = moviesModel;
-    this._menuItemClickHandler = menuItemClickHandler;
-
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
-
+    this._menuItemClickHandler = null;
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
@@ -24,16 +22,23 @@ export default class FilterPresenter {
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new Filter(filters, this._filterModel.get());
-    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
-    this._filterComponent.setMenuItemClickHandler(this._menuItemClickHandler);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
+      render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
       return;
     }
 
+    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+
+
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
+  }
+
+  setMainMenuClickHandler(callback) {
+    this._menuItemClickHandler = callback;
+    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setMenuItemClickHandler(callback);
   }
 
   _handleModelEvent() {
@@ -41,6 +46,7 @@ export default class FilterPresenter {
   }
 
   _handleFilterTypeChange(filterType) {
+    this._filterComponent.setMenuItemClickHandler(this._menuItemClickHandler);
     this._menuItemClickHandler(MenuItem.FILTER);
     if (this._filterModel.get() === filterType) {
       return;
