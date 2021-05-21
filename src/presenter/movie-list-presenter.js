@@ -257,7 +257,7 @@ export default class MovieListPresenter {
           this._moviesModel.deleteComment(updateType, update.filmId, update.commentId);
         })
           .catch(() => {
-            this._renderedMovieInformationPresenter.resetDeleteState();
+            this._renderedMovieInformationPresenter.resetDeleteState(update.commentId);
           });
     }
 

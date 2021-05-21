@@ -75,16 +75,18 @@ export default class PopupPresenter {
     this._commentComponent.shakeForm(() => {
       this._commentComponent.updateData({
         isSaving: false,
+        newEmoji: null,
+        newEmojiText: '',
       });
     });
   }
 
-  resetDeleteState() {
+  resetDeleteState(commentId) {
     this._commentComponent.shakeComment(() => {
       this._commentComponent.updateData({
         isDeleting: false,
       });
-    });
+    }, commentId);
   }
 
   _renderFilmPopup() {

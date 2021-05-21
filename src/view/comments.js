@@ -123,15 +123,18 @@ export default class Comment extends Smart {
   shakeForm(callback) {
     this.getElement().querySelector('.film-details__new-comment').style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     setTimeout(() => {
-      this.getElement().style.animation = '';
+      this.getElement().querySelector('.film-details__new-comment').style.animation = '';
       callback();
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 
-  shakeComment(callback) {
-    this.getElement().querySelector('.film-details__comment').style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+  shakeComment(callback, deletingCommentId) {
+    const deletingElement = Array.from(this.getElement().querySelectorAll('.film-details__comment')).find((element) => {
+      return element.querySelector('.film-details__comment-delete').dataset.commentId === deletingCommentId;
+    });
+    deletingElement.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     setTimeout(() => {
-      this.getElement().style.animation = '';
+      deletingElement.style.animation = '';
       callback();
     }, SHAKE_ANIMATION_TIMEOUT);
   }
