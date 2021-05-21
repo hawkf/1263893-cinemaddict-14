@@ -87,9 +87,6 @@ export default class PopupPresenter {
     });
   }
 
-
-
-
   _renderFilmPopup() {
     const filmDetailsElement = document.querySelector('.film-details__inner');
     render(filmDetailsElement, this._filmInformationComponent, RenderPosition.BEFOREEND);
