@@ -58,9 +58,37 @@ export default class PopupPresenter {
     return this._film.id;
   }
 
-  destroy() {
-    remove(this._filmInformationComponent);
+  setSaving() {
+    this._commentComponent.updateData({
+      isSaving: true,
+    });
   }
+
+  setDeleting(commentId) {
+    this._commentComponent.updateData({
+      isDeleting: true,
+      deletingCommentId: commentId,
+    });
+  }
+
+  resetFormState() {
+    this._commentComponent.shakeForm(() => {
+      this._commentComponent.updateData({
+        isSaving: false,
+      });
+    });
+  }
+
+  resetDeleteState() {
+    this._commentComponent.shakeComment(() => {
+      this._commentComponent.updateData({
+        isDeleting: false,
+      });
+    });
+  }
+
+
+
 
   _renderFilmPopup() {
     const filmDetailsElement = document.querySelector('.film-details__inner');

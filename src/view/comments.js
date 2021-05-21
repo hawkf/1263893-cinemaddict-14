@@ -3,12 +3,13 @@ import Smart from './smart';
 import {isCtrlEnterKey} from '../utils/common';
 import he from 'he';
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
 
 const createCommentsTemplate = (dataState) => {
   const EMOJIS_LIST = ['smile', 'sleeping', 'puke', 'angry'];
-  const {comments, newEmoji, newEmojiText, isSaving} = dataState;
+  const {comments, newEmoji, newEmojiText, isSaving, isDeleting, deletingCommentId} = dataState;
 
-  const createCommentTemplate = (commetsArray) => {
+  const createCommentListTemplate = (commetsArray, isDeleting) => {
     return commetsArray.map((comment) => `<li class="film-details__comment">
             <span class="film-details__comment-emoji">
               <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
@@ -18,7 +19,7 @@ const createCommentsTemplate = (dataState) => {
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${comment.author}</span>
                 <span class="film-details__comment-day">${dayjs(comment.date).format('YYYY/MM/DD hh:mm')}</span>
-                <button class="film-details__comment-delete" data-comment-id=${comment.id}>Delete</button>
+                <button class="film-details__comment-delete" data-comment-id=${comment.id} ${isDeleting && comment.id === deletingCommentId ? 'disabled' : ''}>${isDeleting && comment.id === deletingCommentId ? 'Deleting...' : 'Delete'}</button>
               </p>
             </div>
           </li>`).join('');
@@ -39,7 +40,7 @@ const createCommentsTemplate = (dataState) => {
     return `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">`;
   };
 
-  const commentElement = createCommentTemplate(comments);
+  const commentElement = createCommentListTemplate(comments, isDeleting);
 
   return `<div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
@@ -85,6 +86,8 @@ export default class Comment extends Smart {
         newEmoji: null,
         newEmojiText: '',
         isSaving: false,
+        isDeleting: false,
+        deletingCommentId: null,
       },
     );
   }
@@ -115,6 +118,22 @@ export default class Comment extends Smart {
     delateButtons.forEach((element) => {
       element.addEventListener('click', this._commentDelateHandler);
     });
+  }
+
+  shakeForm(callback) {
+    this.getElement().querySelector('.film-details__new-comment').style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      this.getElement().style.animation = '';
+      callback();
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  shakeComment(callback) {
+    this.getElement().querySelector('.film-details__comment').style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      this.getElement().style.animation = '';
+      callback();
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _setInnerHandlers() {
