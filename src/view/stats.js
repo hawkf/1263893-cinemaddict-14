@@ -1,7 +1,104 @@
 import Smart from './smart';
+import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import dayjs from 'dayjs';
+import {getGenres, getGenreNumber, getTopGenre, getRunTime, watchedCount} from '../utils/statistics';
 
-const createStatsTemplate = () => {
 
+const renderChart = (statisticCtx, films, dateFrom, dateTo) => {
+  const BAR_HEIGHT = 50;
+
+  console.log(getTopGenre(films));
+
+  const getAllGenres = () => {
+
+    const genres = [];
+    films.forEach((film) => {
+      genres.push(...film.genres);
+    });
+
+    return genres;
+  };
+
+  const getGenresCount = () => {
+    const genresNumbers = [...new Set(getAllGenres())].map((genre) => {
+      return {
+        genreName: genre,
+        genreNumber: getAllGenres().filter((element) => element === genre).length,
+      };
+    });
+
+    genresNumbers.sort((a, b) => {
+      return b.genreNumber - a.genreNumber;
+    });
+
+    return genresNumbers;
+  };
+
+ statisticCtx.height = BAR_HEIGHT * getGenresCount().length;
+
+  const myChart = new Chart(statisticCtx, {
+    plugins: [ChartDataLabels],
+    type: 'horizontalBar',
+    data: {
+      labels: getGenresCount().map((element) => element.genreName),
+      datasets: [{
+        data: getGenresCount(films).map((element) => element.genreNumber),
+        backgroundColor: '#ffe800',
+        hoverBackgroundColor: '#ffe800',
+        anchor: 'start',
+      }],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 20,
+          },
+          color: '#ffffff',
+          anchor: 'start',
+          align: 'start',
+          offset: 40,
+        },
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#ffffff',
+            padding: 100,
+            fontSize: 20,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          barThickness: 24,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+        }],
+      },
+      legend: {
+        display: false,
+      },
+      tooltips: {
+        enabled: false,
+      },
+    },
+  });
+
+  return myChart;
+};
+
+const createStatsTemplate = (dataState) => {
+  const {films} = dataState;
 
   return `<section class="statistic visually-hidden">
     <p class="statistic__rank">
@@ -40,7 +137,7 @@ const createStatsTemplate = () => {
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">Sci-Fi</p>
+        <p class="statistic__item-text"></p>
       </li>
     </ul>
 
@@ -52,58 +149,37 @@ const createStatsTemplate = () => {
 };
 
 export default class Stats extends Smart {
-  constructor() {
+  constructor(films) {
     super();
+
+    this._dataState = {
+      films,
+      dateFrom: null,
+      dateTo: dayjs().toDate(),
+    };
+    this._chart = null;
+
+    this._setCharts();
   }
 
   getTemplate() {
-    return createStatsTemplate();
-  }
-
-  _clickHandler(evt) {
-    evt.preventDefault();
-    this._callback.click(this._film.id);
-
-  }
-
-  setClickHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelectorAll('.film-card__poster, .film-card__title, .film-card__comments').forEach((element) => {
-      if(element.classList.contains('film-card__poster') || element.classList.contains('film-card__title') || element.classList.contains('film-card__comments')) {
-        element.addEventListener('click', this._clickHandler);
-      }
-    });
-  }
-
-  setAddWatchListHandler(callback) {
-    this._callback.addWathList = callback;
-    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._addWatchListHandler);
-  }
-
-  setAddIsWatchedHandler(callback) {
-    this._callback.addIsWatched = callback;
-    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._addIsWatchedHandler);
+    return createStatsTemplate(this._dataState);
   }
 
 
-  setAddIsFavoriteHandler(callback) {
-    this._callback.addIsFavorite = callback;
-    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._addIsFavoriteHandler);
-  }
+  _setCharts() {
+    const {films, dateFrom, dateTo} = this._dataState;
 
-  _addWatchListHandler(evt) {
-    evt.preventDefault();
-    this._callback.addWathList();
-  }
+    if (films.length === 0) {
+      this._chart = null;
+      return;
+    }
+    if (this._chart != null) {
+      this._chart = null;
+    }
 
-  _addIsWatchedHandler(evt) {
-    evt.preventDefault();
-    this._callback.addIsWatched();
-  }
+    const statisticCtx = this.getElement().querySelector('.statistic__chart');
 
-
-  _addIsFavoriteHandler(evt) {
-    evt.preventDefault();
-    this._callback.addIsFavorite();
+    this._chart = renderChart(statisticCtx, films, dateFrom, dateTo);
   }
 }

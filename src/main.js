@@ -21,12 +21,14 @@ const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
 const siteBodyElement = document.querySelector('body');
 const footerElement = document.querySelector('footer');
-const statisticsElement = new Stats();
+
 
 const moviesModel = new Movies();
 const commentsModel = new Comments();
 const movieListPresenter = new MovieListPresenter(siteMainElement, siteBodyElement, moviesModel, commentsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
+
+let statisticsElement = null;
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -42,12 +44,15 @@ const handleSiteMenuClick = (menuItem) => {
 
 
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
-render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
+
 
 
 api.getMovies()
   .then((movies) => {
     moviesModel.set(UpdateType.INIT, movies);
+    statisticsElement = new Stats(moviesModel.get());
+    console.log(moviesModel.get());
+    render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
     filterPresenter.setMainMenuClickHandler(handleSiteMenuClick);
   })
   .catch(() => {
