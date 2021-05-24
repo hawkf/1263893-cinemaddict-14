@@ -155,7 +155,7 @@ export default class Comment extends Smart {
   }
 
   _commentInputHandler(evt) {
-    evt.preventDefault();
+    debugger;
     this.updateData({
       newEmojiText: evt.target.value,
     }, true);
