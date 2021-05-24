@@ -66,7 +66,6 @@ export default class Movies extends Observer {
       },
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedMovie.film_info;
     delete adaptedMovie.user_details;
 
@@ -74,7 +73,7 @@ export default class Movies extends Observer {
   }
 
   static adaptToServer(movie) {
-    const adaptedMovie = Object.assign(
+    return  Object.assign(
       {},
       {
         id: movie.id,
@@ -104,7 +103,5 @@ export default class Movies extends Observer {
         },
       },
     );
-
-    return adaptedMovie;
   }
 }

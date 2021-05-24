@@ -14,7 +14,7 @@ export default class Comments extends Observer {
     return this._comments;
   }
 
-  deleteComment(commentId) {
+  delete(commentId) {
     this._comments = this._comments.filter((comment) => comment.id !== commentId);
   }
 }

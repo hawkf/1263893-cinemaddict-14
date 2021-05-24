@@ -4,13 +4,10 @@ import {isCtrlEnterKey} from '../utils/common';
 import he from 'he';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
+const EMOJIS_LIST = ['smile', 'sleeping', 'puke', 'angry'];
 
-const createCommentsTemplate = (dataState) => {
-  const EMOJIS_LIST = ['smile', 'sleeping', 'puke', 'angry'];
-  const {comments, newEmoji, newEmojiText, isSaving, isDeleting, deletingCommentId} = dataState;
-
-  const createCommentListTemplate = (commetsArray, isDeleting) => {
-    return commetsArray.map((comment) => `<li class="film-details__comment">
+const createCommentListTemplate = (commets, isDeleting, deletingCommentId) => {
+  return commets.map((comment) => `<li class="film-details__comment">
             <span class="film-details__comment-emoji">
               <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
             </span>
@@ -23,24 +20,27 @@ const createCommentsTemplate = (dataState) => {
               </p>
             </div>
           </li>`).join('');
-  };
+};
 
-  const creteEmojiTemplate = (emojisArray, isSaving) => {
-    return emojisArray.map((emoji) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value=${emoji} ${isSaving ? 'disabled' : ''}>
+const creteEmojiTemplate = (emojis, isSaving) => {
+  return emojis.map((emoji) => `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value=${emoji} ${isSaving ? 'disabled' : ''}>
             <label class="film-details__emoji-label" for="emoji-${emoji}">
               <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">
             </label>`).join('');
-  };
+};
 
-  const getNewEmoji = (emoji) => {
-    if(emoji === null){
-      return '';
-    }
+const getNewEmoji = (emoji) => {
+  if(emoji === null){
+    return '';
+  }
 
-    return `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">`;
-  };
+  return `<img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji">`;
+};
 
-  const commentElement = createCommentListTemplate(comments, isDeleting);
+const createCommentsTemplate = (dataState) => {
+  const {comments, newEmoji, newEmojiText, isSaving, isDeleting, deletingCommentId} = dataState;
+
+  const commentElement = createCommentListTemplate(comments, isDeleting, deletingCommentId);
 
   return `<div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
@@ -74,29 +74,6 @@ export default class Comment extends Smart {
 
   getTemplate() {
     return createCommentsTemplate(this._dataState);
-  }
-
-  static parseCommentToData(comments) {
-    return Object.assign(
-      {},
-      {
-        comments: comments,
-      },
-      {
-        newEmoji: null,
-        newEmojiText: '',
-        isSaving: false,
-        isDeleting: false,
-        deletingCommentId: null,
-      },
-    );
-  }
-
-  static parseDataToNewComment(data) {
-    return {
-      comment: data.newEmojiText,
-      emotion: data.newEmoji,
-    };
   }
 
   restoreHandlers() {
@@ -155,7 +132,7 @@ export default class Comment extends Smart {
   }
 
   _commentInputHandler(evt) {
-    debugger;
+    evt.preventDefault();
     this.updateData({
       newEmojiText: evt.target.value,
     }, true);
@@ -174,5 +151,28 @@ export default class Comment extends Smart {
   _commentDelateHandler(evt) {
     evt.preventDefault();
     this._callback.commentDelate(evt.target.dataset.commentId);
+  }
+
+  static parseCommentToData(comments) {
+    return Object.assign(
+      {},
+      {
+        comments: comments,
+      },
+      {
+        newEmoji: null,
+        newEmojiText: '',
+        isSaving: false,
+        isDeleting: false,
+        deletingCommentId: null,
+      },
+    );
+  }
+
+  static parseDataToNewComment(data) {
+    return {
+      comment: data.newEmojiText,
+      emotion: data.newEmoji,
+    };
   }
 }

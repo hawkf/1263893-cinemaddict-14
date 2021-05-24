@@ -107,13 +107,6 @@ export default class FilmDetailsInformation extends AbstractView {
     this.removeKeyDownEscapeHandler();
   }
 
-  static parseFilmToData(film) {
-    return Object.assign(
-      {},
-      film,
-    );
-  }
-
   setClickHandler(callback) {
     this._callback.close = callback;
 
@@ -149,7 +142,6 @@ export default class FilmDetailsInformation extends AbstractView {
   }
 
   _keyDownEscapeHandler(evt) {
-    evt.preventDefault();
     if(isEscEvent(evt)) {
       this._callback.close();
     }
@@ -170,5 +162,12 @@ export default class FilmDetailsInformation extends AbstractView {
   _addIsFavoriteHandler(evt) {
     evt.preventDefault();
     this._callback.addIsFavorite();
+  }
+
+  static parseFilmToData(film) {
+    return Object.assign(
+      {},
+      film,
+    );
   }
 }

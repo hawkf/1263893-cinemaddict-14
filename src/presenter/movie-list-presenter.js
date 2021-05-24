@@ -95,8 +95,7 @@ export default class MovieListPresenter {
 
   _createMovieInformationPresenters (movies) {
     movies.forEach((movie) => {
-      const movieInformation = new PopupPresenter(movie, this._handleViewAction, this._handleRemoveFilmPopup);
-      this._movieInformationPresenter[movie.id] = movieInformation;
+      this._movieInformationPresenter[movie.id] = new PopupPresenter(movie, this._handleViewAction, this._handleRemoveFilmPopup);
     });
   }
 
@@ -263,7 +262,7 @@ export default class MovieListPresenter {
       case UserAction.DELETE_COMMENT:
         this._renderedMovieInformationPresenter.setDeleting(update.commentId);
         this._api.deleteComment(update.commentId).then(() => {
-          this._commentsModel.deleteComment(update.commentId);
+          this._commentsModel.delete(update.commentId);
           this._moviesModel.deleteComment(updateType, update.filmId, update.commentId);
         })
           .catch(() => {

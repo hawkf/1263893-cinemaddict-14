@@ -3,22 +3,15 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import dayjs from 'dayjs';
 import {StatisticsType} from '../const';
-import {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getFilmsInDateRange, getProfileRank} from '../utils/statistics';
+import {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getSortedFilms, getProfileRank} from '../utils/statistics';
 
 const renderChart = (statisticCtx, dataState) => {
   const BAR_HEIGHT = 50;
-
-  let films = null;
-
-  if(dataState.dateFrom === null) {
-    films = dataState.films.slice();
-  } else {
-    films = getFilmsInDateRange(dataState.films, dataState.dateFrom);
-  }
+  const films = getSortedFilms(dataState);
 
   statisticCtx.height = BAR_HEIGHT * getGenres(films).length;
 
-  const myChart = new Chart(statisticCtx, {
+  return  new Chart(statisticCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
@@ -74,20 +67,11 @@ const renderChart = (statisticCtx, dataState) => {
       },
     },
   });
-
-  return myChart;
 };
 
 const createStatsTemplate = (dataState) => {
   const currentFilter = dataState.currentFilter;
-
-  let films = null;
-
-  if(dataState.dateFrom === null) {
-    films = dataState.films.slice();
-  } else {
-    films = getFilmsInDateRange(dataState.films, dataState.dateFrom);
-  }
+  const films = getSortedFilms(dataState);
 
   return `<section class="statistic">
     <p class="statistic__rank">

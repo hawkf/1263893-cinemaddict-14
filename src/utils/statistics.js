@@ -76,6 +76,11 @@ const getFilmsInDateRange = (films, dateFrom) => {
   });
 };
 
+const getSortedFilms = (dataState) => {
+  const sortedFilms = dataState.dateFrom === null ? dataState.films.slice() : getFilmsInDateRange(dataState.films, dataState.dateFrom);
+  return sortedFilms;
+};
+
 const getProfileRank = (films) => {
   if(films === null) {
     return '';
@@ -96,4 +101,4 @@ const getProfileRank = (films) => {
   }
 };
 
-export {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getFilmsInDateRange, getProfileRank};
+export {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getSortedFilms, getProfileRank};
