@@ -48,7 +48,9 @@ export default class Filter extends AbstractView {
   setMenuItemClickHandler(callback)
   {
     this._callback.menuItemClick = callback;
-    this.getElement().querySelector('.main-navigation__item').addEventListener('click', this._menuItemClickHandler);
+    this.getElement().querySelectorAll('.main-navigation__item').forEach((element) => {
+      element.addEventListener('click', this._menuItemClickHandler);
+    });
     this.getElement().querySelector('.main-navigation__additional').addEventListener('click', this._menuItemClickHandler);
   }
 
@@ -64,6 +66,8 @@ export default class Filter extends AbstractView {
   _menuItemClickHandler(evt) {
     evt.preventDefault();
     if(evt.target.classList.contains('main-navigation__item')) {
+      this.getElement().querySelector('.main-navigation__item--active').classList.remove('main-navigation__item--active');
+      evt.target.classList.add('main-navigation__item--active');
       this._callback.menuItemClick(MenuItem.FILTER);
     } else if (evt.target.classList.contains('main-navigation__additional')) {
       this.getElement().querySelector('.main-navigation__item--active').classList.remove('main-navigation__item--active');

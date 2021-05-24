@@ -1,5 +1,5 @@
 import Profile from './view/profile';
-import {render, RenderPosition} from './utils/render';
+import {remove, render, RenderPosition} from './utils/render';
 import MovieListPresenter from './presenter/movie-list-presenter';
 import Movies from './model/movies';
 import Filter from './model/filter';
@@ -33,11 +33,13 @@ let statisticsElement = null;
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.STATISTICS :
+      statisticsElement = new Stats(moviesModel.get());
+      render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
       statisticsElement.show();
       movieListPresenter.hide();
       break;
     case MenuItem.FILTER:
-      statisticsElement.hide();
+      remove(statisticsElement);
       movieListPresenter.show();
   }
 };
@@ -45,14 +47,9 @@ const handleSiteMenuClick = (menuItem) => {
 
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
 
-
-
 api.getMovies()
   .then((movies) => {
     moviesModel.set(UpdateType.INIT, movies);
-    statisticsElement = new Stats(moviesModel.get());
-    console.log(moviesModel.get());
-    render(siteMainElement, statisticsElement, RenderPosition.BEFOREEND);
     filterPresenter.setMainMenuClickHandler(handleSiteMenuClick);
   })
   .catch(() => {

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 
 const getAllGenres = (films) => {
 
@@ -13,7 +14,7 @@ const getGenresCount = (films) => {
   const genresNumbers = [...new Set(getAllGenres(films))].map((genre) => {
     return {
       genreName: genre,
-      genreNumber: getAllGenres().filter((element) => element === genre).length,
+      genreNumber: getAllGenres(films).filter((element) => element === genre).length,
     };
   });
 
@@ -53,6 +54,14 @@ const getRunTime = (films) => {
   return runTime;
 };
 
+const getRunTimeHours = (films) => {
+  return parseInt(getRunTime(films) / 60);
+};
+
+const getRunTimeMinutes = (films) => {
+  return getRunTime(films) % 60;
+};
+
 const watchedCount = (films) => {
   if (films.length === 0) {
     return 0;
@@ -61,4 +70,10 @@ const watchedCount = (films) => {
   return films.filter((film) => film.isWatched === true).length;
 };
 
-export {getGenres, getGenreNumber, getTopGenre, getRunTime, watchedCount};
+const getFilmsInDateRange = (films, dateFrom) => {
+  return films.filter((film) => {
+    return dayjs(film.watchingDate).isAfter(dateFrom, 'day') || dayjs(film.watchingDate).isSame(dateFrom, 'day');
+  });
+};
+
+export {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getFilmsInDateRange};

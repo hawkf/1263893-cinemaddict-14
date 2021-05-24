@@ -29,6 +29,7 @@ export default class FilterPresenter {
     }
 
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._filterComponent.setMenuItemClickHandler(this._menuItemClickHandler);
 
 
     replace(this._filterComponent, prevFilterComponent);
