@@ -54,6 +54,11 @@ export default class PopupPresenter {
     this._film = film;
   }
 
+  destroy() {
+    remove(this._filmInformationComponent);
+    remove(this._commentComponent);
+  }
+
   getFilmId() {
     return this._film.id;
   }

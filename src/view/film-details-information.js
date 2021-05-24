@@ -1,5 +1,6 @@
 import {AbstractView} from './abstract';
 import {humanizeFilmRealeaseDate} from '../utils/film';
+import {isEscEvent} from '../utils/common';
 
 const createFilmDetailsInformationTemplate = (data) => {
   const {title, alternativeTitle, rating, duration, genres, poster, description, age, director, writers, actors, releaseDate, country, watchList, isWatched, isFavorite} = data;
@@ -89,13 +90,21 @@ export default class FilmDetailsInformation extends AbstractView {
 
     this._data = FilmDetailsInformation.parseFilmToData(film);
     this._clickHandler = this._clickHandler.bind(this);
+    this._keyDownEscapeHandler = this._keyDownEscapeHandler.bind(this);
     this._addWatchListHandler = this._addWatchListHandler.bind(this);
     this._addIsWatchedHandler = this._addIsWatchedHandler.bind(this);
     this._addIsFavoriteHandler = this._addIsFavoriteHandler.bind(this);
+
+    this.setKeyDownEscapeHandler();
   }
 
   getTemplate() {
     return createFilmDetailsInformationTemplate(this._data);
+  }
+
+  removeElement() {
+    super.removeElement();
+    this.removeKeyDownEscapeHandler();
   }
 
   static parseFilmToData(film) {
@@ -105,17 +114,18 @@ export default class FilmDetailsInformation extends AbstractView {
     );
   }
 
-  static parseDataToFilm(data) {
-    return Object.assign(
-      {},
-      data,
-    );
-  }
-
   setClickHandler(callback) {
     this._callback.close = callback;
 
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
+  }
+
+  setKeyDownEscapeHandler() {
+    document.addEventListener('keydown', this._keyDownEscapeHandler);
+  }
+
+  removeKeyDownEscapeHandler() {
+    document.removeEventListener('keydown', this._keyDownEscapeHandler);
   }
 
   setAddWatchListHandler(callback) {
@@ -133,10 +143,16 @@ export default class FilmDetailsInformation extends AbstractView {
     this.getElement().querySelector('#favorite').addEventListener('click', this._addIsFavoriteHandler);
   }
 
-
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.close();
+  }
+
+  _keyDownEscapeHandler(evt) {
+    evt.preventDefault();
+    if(isEscEvent(evt)) {
+      this._callback.close();
+    }
   }
 
 

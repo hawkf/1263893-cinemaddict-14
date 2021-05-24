@@ -18,8 +18,13 @@ const shuffle = (array) => {
 
 export const isCtrlEnterKey = (evt) => evt.ctrlKey && evt.keyCode == 13;
 
+const isEscEvent = function (evt) {
+  return evt.key === ('Escape' || 'Esc');
+};
+
 export {shuffle};
 export {getRandomArrayElement};
 export {getRandomIndex};
 export {getRandomFloat};
 export {getRandomInteger};
+export {isEscEvent};

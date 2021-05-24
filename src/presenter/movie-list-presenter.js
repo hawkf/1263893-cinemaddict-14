@@ -74,6 +74,8 @@ export default class MovieListPresenter {
   show() {
     this._sortComponent.show();
     this._filmsComponent.show();
+    this._clearMovieList({resetRenderedFilmCount: true, resetSortType: false});
+    this._renderMovieList();
   }
 
   _getMovies() {
@@ -182,7 +184,7 @@ export default class MovieListPresenter {
     }
     this._currentSortType = sortType;
 
-    this._clearMovieList({resetRenderedTaskCount: true});
+    this._clearMovieList({resetRenderedFilmCount: true, resetSortType: false});
     this._renderMovieList();
   }
 
@@ -316,6 +318,7 @@ export default class MovieListPresenter {
   }
 
   _handleRemoveFilmPopup() {
+    this._renderedMovieInformationPresenter.destroy();
     this._popupContainer.removeChild(this._filmDetailsComponent.getElement());
     this._popupContainer.classList.remove('hide-overflow');
     remove(this._filmDetailsComponent);
