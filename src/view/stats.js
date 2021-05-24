@@ -3,7 +3,7 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import dayjs from 'dayjs';
 import {StatisticsType} from '../const';
-import {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getFilmsInDateRange} from '../utils/statistics';
+import {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getFilmsInDateRange, getProfileRank} from '../utils/statistics';
 
 const renderChart = (statisticCtx, dataState) => {
   const BAR_HEIGHT = 50;
@@ -93,7 +93,7 @@ const createStatsTemplate = (dataState) => {
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Movie buff</span>
+      <span class="statistic__rank-label">${getProfileRank(dataState.films)}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">

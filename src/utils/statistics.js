@@ -76,4 +76,24 @@ const getFilmsInDateRange = (films, dateFrom) => {
   });
 };
 
-export {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getFilmsInDateRange};
+const getProfileRank = (films) => {
+  if(films === null) {
+    return '';
+  }
+
+  const watchedFilmsCount =  films.filter((film) => {
+    return film.isWatched === true;
+  }).length;
+
+  if (watchedFilmsCount >= 1 && watchedFilmsCount <= 10) {
+    return 'Novice';
+  } else if (watchedFilmsCount >= 11 && watchedFilmsCount <= 20) {
+    return 'Fan';
+  } else if (watchedFilmsCount >= 21){
+    return 'Movie Buff';
+  } else {
+    return '';
+  }
+};
+
+export {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getFilmsInDateRange, getProfileRank};

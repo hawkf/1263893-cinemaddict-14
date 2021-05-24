@@ -11,13 +11,15 @@ import NoFilmComponent from '../view/no-film';
 import {filter} from '../utils/filter';
 import PopupPresenter from './popup';
 import Loading from '../view/loading';
+import Profile from '../view/profile';
 
 
 const FILM_COUNT_PER_STEP = 5;
 
 export default class MovieListPresenter {
 
-  constructor(movieContainer, popupContainer, moviesModel, commentsModel, filterModel, api) {
+  constructor(profileContainer, movieContainer, popupContainer, moviesModel, commentsModel, filterModel, api) {
+    this._profileContainer = profileContainer;
     this._movieContainer = movieContainer;
     this._popupContainer = popupContainer;
     this._moviesModel = moviesModel;
@@ -27,6 +29,7 @@ export default class MovieListPresenter {
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
     this._isLoading = true;
 
+    this._profileComponent = null;
     this._loadingComponent = new Loading();
     this._sortComponent = null;
     this._showMoreButtonComponent = null;
@@ -54,6 +57,7 @@ export default class MovieListPresenter {
       this._renderSort();
     }
 
+    this._renderProfile(null);
     this._renderFilmsContainer();
     this._renderMovieList();
 
@@ -94,6 +98,14 @@ export default class MovieListPresenter {
     });
   }
 
+  _renderProfile(films) {
+    if(this._profileComponent !== null) {
+      remove(this._profileComponent);
+    }
+    this._profileComponent = new Profile(films);
+    render(this._profileContainer, this._profileComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderLoading() {
     this._filmsListContainerElement = this._filmsListComponent.getElement().querySelector('.films-list__container');
     render(this._filmsListContainerElement, this._loadingComponent, RenderPosition.BEFOREEND);
@@ -111,7 +123,6 @@ export default class MovieListPresenter {
       .values(this._moviePresenter)
       .forEach((presenter) => presenter.destroy());
     this._moviePresenter = {};
-    this._renderedFilmCount = FILM_COUNT_PER_STEP;
     remove(this._filmsComponent);
     remove(this._filmsListComponent);
     remove(this._noFilmsComponent);
@@ -139,6 +150,7 @@ export default class MovieListPresenter {
       this._renderSort();
     }
 
+    this._renderProfile(this._moviesModel.get());
     this._renderFilmsContainer();
 
     const filmCount = this._getMovies().length;
@@ -149,15 +161,11 @@ export default class MovieListPresenter {
       const popupFilm = this._moviesModel.get().find((film) => film.id === this._renderedMovieInformationPresenter.getFilmId());
       this._renderedMovieInformationPresenter.update(popupFilm);
       this._renderedMovieInformationPresenter.init(this._filmDetailsComponent, this._commentsModel.get());
-      /*this._api.getComments(popupFilm.id).then((response) => {
-        this._renderedMoviePresenter.init(this._filmDetailsComponent, response);
-      });*/
     }
     if (filmCount === 0) {
       this._renderNoFilms();
       return;
     }
-
 
     this._renderFilms(films.slice(0, Math.min(filmCount, this._renderedFilmCount)));
 

@@ -1,4 +1,3 @@
-import Profile from './view/profile';
 import {remove, render, RenderPosition} from './utils/render';
 import MovieListPresenter from './presenter/movie-list-presenter';
 import Movies from './model/movies';
@@ -25,7 +24,7 @@ const footerElement = document.querySelector('footer');
 
 const moviesModel = new Movies();
 const commentsModel = new Comments();
-const movieListPresenter = new MovieListPresenter(siteMainElement, siteBodyElement, moviesModel, commentsModel, filterModel, api);
+const movieListPresenter = new MovieListPresenter(siteHeaderElement, siteMainElement, siteBodyElement, moviesModel, commentsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, moviesModel);
 
 let statisticsElement = null;
@@ -43,9 +42,6 @@ const handleSiteMenuClick = (menuItem) => {
       movieListPresenter.show();
   }
 };
-
-
-render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
 
 api.getMovies()
   .then((movies) => {
