@@ -43,10 +43,17 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
+let footerStatisticComponent = new FooterStatistics(null);
+
 api.getMovies()
   .then((movies) => {
     moviesModel.set(UpdateType.INIT, movies);
     filterPresenter.setMainMenuClickHandler(handleSiteMenuClick);
+    if(footerStatisticComponent !== null) {
+      remove(footerStatisticComponent);
+    }
+    footerStatisticComponent = new FooterStatistics(moviesModel.get().length);
+    render(footerElement, footerStatisticComponent, 'beforeend');
   })
   .catch(() => {
     moviesModel.set(UpdateType.INIT, []);
@@ -55,4 +62,4 @@ api.getMovies()
 filterPresenter.init();
 movieListPresenter.init();
 
-render(footerElement, new FooterStatistics(20), 'beforeend');
+render(footerElement, footerStatisticComponent, 'beforeend');

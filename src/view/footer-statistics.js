@@ -2,7 +2,7 @@ import {AbstractView} from './abstract';
 
 const createFooterStatisticsTemplate = (filmsNumber) => {
   return `<section class="footer__statistics">
-    <p>${filmsNumber} movies inside</p>
+    <p>${filmsNumber === null ? '' : filmsNumber + ' movies inside'}</p>
   </section>`;
 };
 
