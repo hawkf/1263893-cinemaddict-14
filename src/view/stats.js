@@ -159,7 +159,7 @@ export default class Stats extends Smart {
       this._chart = null;
       return;
     }
-    if (this._chart != null) {
+    if (this._chart !== null) {
       this._chart = null;
     }
 
