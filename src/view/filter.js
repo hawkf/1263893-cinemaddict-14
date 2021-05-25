@@ -8,7 +8,7 @@ const createFilterItemTemplate = (filter, currentFilterType) => {
             href="#${type}"
             class="main-navigation__item ${currentFilterType === type ? 'main-navigation__item--active' : ''}"
             data-filter-type=${type}>
-            ${name}${type === FilterType.ALL ? '' : `<span class="main-navigation__item-count">${count}`}</span></a>`;
+            ${name}${type === FilterType.ALL ? '' : `<span class="main-navigation__item-count" data-filter-type=${type}>${count}`}</span></a>`;
 };
 
 const createFilterTemplate = (filterItems, currentFilterType) => {
@@ -43,12 +43,18 @@ export default class Filter extends AbstractView {
     this.getElement().querySelectorAll('.main-navigation__item').forEach((element) => {
       element.addEventListener('click', this._filterTypeChangeHandler);
     });
+    this.getElement().querySelectorAll('.main-navigation__item-count').forEach((element) => {
+      element.addEventListener('click', this._filterTypeChangeHandler);
+    });
   }
 
   setMenuItemClickHandler(callback)
   {
     this._callback.menuItemClick = callback;
     this.getElement().querySelectorAll('.main-navigation__item').forEach((element) => {
+      element.addEventListener('click', this._menuItemClickHandler);
+    });
+    this.getElement().querySelectorAll('.main-navigation__item-count').forEach((element) => {
       element.addEventListener('click', this._menuItemClickHandler);
     });
     this.getElement().querySelector('.main-navigation__additional').addEventListener('click', this._menuItemClickHandler);
