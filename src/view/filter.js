@@ -43,9 +43,6 @@ export default class Filter extends AbstractView {
     this.getElement().querySelectorAll('.main-navigation__item').forEach((element) => {
       element.addEventListener('click', this._filterTypeChangeHandler);
     });
-    this.getElement().querySelectorAll('.main-navigation__item-count').forEach((element) => {
-      element.addEventListener('click', this._filterTypeChangeHandler);
-    });
   }
 
   setMenuItemClickHandler(callback)
@@ -54,17 +51,10 @@ export default class Filter extends AbstractView {
     this.getElement().querySelectorAll('.main-navigation__item').forEach((element) => {
       element.addEventListener('click', this._menuItemClickHandler);
     });
-    this.getElement().querySelectorAll('.main-navigation__item-count').forEach((element) => {
-      element.addEventListener('click', this._menuItemClickHandler);
-    });
     this.getElement().querySelector('.main-navigation__additional').addEventListener('click', this._menuItemClickHandler);
   }
 
   _filterTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'A') {
-      return;
-    }
-
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.dataset.filterType);
   }
