@@ -62,4 +62,5 @@ api.getMovies()
 filterPresenter.init();
 movieListPresenter.init();
 
+
 render(footerElement, footerStatisticComponent, 'beforeend');
