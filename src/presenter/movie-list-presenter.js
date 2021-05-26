@@ -114,7 +114,7 @@ export default class MovieListPresenter {
 
   _renderNoFilms() {
     this._filmsListContainerElement = this._filmsListComponent.getElement().querySelector('.films-list__container');
-    render(this._filmsComponent, this._noFilmsComponent, RenderPosition.BEFOREEND);
+    render(this._filmsListComponent, this._noFilmsComponent, RenderPosition.BEFOREEND);
   }
 
   _clearMovieList({resetRenderedFilmCount = false, resetSortType = false} = {}) {
