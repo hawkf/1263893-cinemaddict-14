@@ -1,5 +1,5 @@
 import {AbstractView} from './abstract';
-import {humanizeFilmRealeaseDate} from '../utils/film';
+import {humanizeFilmRealeaseDate, formatDuration} from '../utils/film';
 import {isEscEvent} from '../utils/common';
 
 const createFilmDetailsInformationTemplate = (data) => {
@@ -55,7 +55,7 @@ const createFilmDetailsInformationTemplate = (data) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${formatDuration(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>

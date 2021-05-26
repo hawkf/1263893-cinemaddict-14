@@ -3,7 +3,7 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import dayjs from 'dayjs';
 import {StatisticsType} from '../const';
-import {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getSortedFilms, getProfileRank} from '../utils/statistics';
+import {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, getWatchedCount, getSortedFilms, getProfileRank} from '../utils/statistics';
 
 const renderChart = (statisticCtx, dataState) => {
   const BAR_HEIGHT = 50;
@@ -102,7 +102,7 @@ const createStatsTemplate = (dataState) => {
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${watchedCount(films)} <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${getWatchedCount(films)} <span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>

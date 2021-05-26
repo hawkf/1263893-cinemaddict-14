@@ -1,8 +1,11 @@
 import {AbstractView} from './abstract';
+import {formatDuration} from '../utils/film';
+
+const DESCRIPTION_MAX_LENGTH = 140;
 
 const createFilmCardTemplate = (film) => {
   const {alternativeTitle, rating, year, duration, genres, poster, description, comments, watchList, isWatched, isFavorite} = film;
-  const resultDescription = description.length > 140 ? description.substring(0, 139) + '...' : description;
+  const resultDescription = description.length > DESCRIPTION_MAX_LENGTH ? description.substring(0, DESCRIPTION_MAX_LENGTH - 1) + '...' : description;
 
 
   return `<article class="film-card">
@@ -10,7 +13,7 @@ const createFilmCardTemplate = (film) => {
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${year}</span>
-            <span class="film-card__duration">${duration}</span>
+            <span class="film-card__duration">${formatDuration(duration)}</span>
             <span class="film-card__genre">${genres.join(' ')}</span>
           </p>
           <img src=${poster} alt="" class="film-card__poster">
@@ -36,12 +39,6 @@ export default class FilmCard extends AbstractView {
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
-  }
-
-  _clickHandler(evt) {
-    evt.preventDefault();
-    this._callback.click(this._film.id);
-
   }
 
   setClickHandler(callback) {
@@ -83,5 +80,10 @@ export default class FilmCard extends AbstractView {
   _addIsFavoriteHandler(evt) {
     evt.preventDefault();
     this._callback.addIsFavorite();
+  }
+
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click(this._film.id);
   }
 }

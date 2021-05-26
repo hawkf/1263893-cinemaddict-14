@@ -62,7 +62,7 @@ const getRunTimeMinutes = (films) => {
   return getRunTime(films) % 60;
 };
 
-const watchedCount = (films) => {
+const getWatchedCount = (films) => {
   if (films.length === 0) {
     return 0;
   }
@@ -96,9 +96,9 @@ const getProfileRank = (films) => {
     return 'Fan';
   } else if (watchedFilmsCount >= 21){
     return 'Movie Buff';
-  } else {
-    return '';
   }
+
+  return '';
 };
 
-export {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, watchedCount, getSortedFilms, getProfileRank};
+export {getGenres, getGenreNumber, getTopGenre, getRunTimeHours, getRunTimeMinutes, getWatchedCount, getSortedFilms, getProfileRank};

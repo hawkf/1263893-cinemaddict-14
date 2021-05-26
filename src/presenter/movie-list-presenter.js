@@ -114,7 +114,7 @@ export default class MovieListPresenter {
 
   _renderNoFilms() {
     this._filmsListContainerElement = this._filmsListComponent.getElement().querySelector('.films-list__container');
-    render(this._filmsListContainerElement, this._noFilmsComponent, RenderPosition.BEFOREEND);
+    render(this._filmsComponent, this._noFilmsComponent, RenderPosition.BEFOREEND);
   }
 
   _clearMovieList({resetRenderedFilmCount = false, resetSortType = false} = {}) {
@@ -130,12 +130,7 @@ export default class MovieListPresenter {
     remove(this._loadingComponent);
     remove(this._showMoreButtonComponent);
 
-    if (resetRenderedFilmCount) {
-      this._renderedFilmCount = FILM_COUNT_PER_STEP;
-    } else {
-      this._renderedFilmCount = Math.min(filmCount, this._renderedFilmCount);
-    }
-
+    resetRenderedFilmCount ? this._renderedFilmCount = FILM_COUNT_PER_STEP : this._renderedFilmCount = Math.min(filmCount, this._renderedFilmCount);
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
@@ -165,6 +160,7 @@ export default class MovieListPresenter {
     }
     if (filmCount === 0) {
       this._renderNoFilms();
+      this._renderedFilmCount = FILM_COUNT_PER_STEP;
       return;
     }
 
